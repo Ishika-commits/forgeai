@@ -1,0 +1,19 @@
+port,country,gt_band,port_dues_usd_per_gt,pilotage_usd,towage_usd_per_tug,min_tugs,berth_usd_per_hour
+Singapore,Singapore,0-10000,0.18,950,1400,1,85
+Singapore,Singapore,10001-30000,0.16,1650,1900,2,140
+Singapore,Singapore,30001+,0.14,2400,2600,2,210
+Rotterdam,Netherlands,0-10000,0.31,1200,1750,1,95
+Rotterdam,Netherlands,10001-30000,0.28,2100,2300,2,160
+Rotterdam,Netherlands,30001+,0.25,3300,3100,3,240
+Mumbai,India,0-10000,0.12,700,1100,1,60
+Mumbai,India,10001-30000,0.11,1250,1500,2,95
+Mumbai,India,30001+,0.10,1900,2050,2,150
+Jebel Ali,UAE,0-10000,0.15,800,1300,1,70
+Jebel Ali,UAE,10001-30000,0.14,1400,1700,2,120
+Jebel Ali,UAE,30001+,0.12,2150,2350,2,185
+Santos,Brazil,0-10000,0.22,1100,1600,1,80
+Santos,Brazil,10001-30000,0.20,1900,2150,2,135
+Santos,Brazil,30001+,0.18,2850,2900,3,205
+Busan,South Korea,0-10000,0.17,900,1350,1,75
+Busan,South Korea,10001-30000,0.15,1550,1800,2,130
+Busan,South Korea,30001+,0.13,2300,2500,2,195

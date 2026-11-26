@@ -1,0 +1,5 @@
+requests>=2.31
+pypdf>=4.0
+numpy>=1.26
+scikit-learn>=1.4
+reportlab>=4.0   # only to rebuild the demo PDFs

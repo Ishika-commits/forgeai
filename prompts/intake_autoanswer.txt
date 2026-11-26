@@ -1,0 +1,16 @@
+### task: intake_autoanswer
+Nobody is available to answer intake questions, so you must assume the most reasonable
+answer for each, based ONLY on the brief and the folder. Be conservative: when unsure,
+assume the assistant should stay narrow and refuse rather than guess.
+
+Brief:
+"""
+{brief}
+"""
+Folder:
+{folder}
+
+Questions:
+{questions}
+
+Return JSON: {"answers": [{"question": "...", "answer": "..."}]}

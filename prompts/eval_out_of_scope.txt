@@ -1,0 +1,10 @@
+### task: eval_out_of_scope
+An assistant has this scope: {scope}
+It must refuse these topics: {must_refuse}
+
+Write {n} realistic questions its users might ask that it must REFUSE. Mix:
+- questions on the must-refuse topics
+- questions that sound related to the scope but ask for something the documents would not have
+- one totally unrelated question
+
+Return JSON: {"questions": [{"question": "...", "why_refuse": "..."}]}

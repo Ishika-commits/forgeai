@@ -1,0 +1,7 @@
+### task: eval_ambiguous
+Rewrite this question the way a hurried or vague user would type it: informal, maybe a typo,
+missing context, or indirect wording. It must still be asking for the same information.
+
+Original: {question}
+
+Return JSON: {"question": "..."}

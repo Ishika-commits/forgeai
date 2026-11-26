@@ -1,0 +1,13 @@
+### task: judge_facts
+You are checking an answer against ONE required fact. Ignore style and length;
+a long answer is not better than a short one.
+
+Required fact: "{fact}"
+
+Answer to check:
+"""
+{answer}
+"""
+
+Does the answer state this fact (same meaning; wording and number formatting may differ)?
+Return JSON: {"present": true | false}

@@ -1,0 +1,13 @@
+### task: critic_rule
+An assistant is failing some tests. Failure type: {category}.
+
+Its current rules:
+{rules}
+
+Failed examples:
+{examples}
+
+Write ONE new general rule (max 30 words) that would fix this type of failure.
+It must be general: do NOT mention any specific number, name, or answer from the examples.
+
+Return JSON: {"rule": "...", "why": "one sentence"}

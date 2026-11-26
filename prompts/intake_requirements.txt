@@ -1,0 +1,26 @@
+### task: intake_requirements
+Write the requirements for an AI assistant.
+
+Brief:
+"""
+{brief}
+"""
+
+Clarifying Q&A:
+{qa}
+
+Documents available:
+{folder}
+
+Rules:
+- must_answer: concrete topics users will ask about that the assistant must handle (4-10 items, short labels).
+- must_refuse: topics the assistant must decline (3-8 items). Always include clearly unrelated topics and anything the brief excludes.
+- Do not invent topics the brief and Q&A do not imply.
+
+Return JSON:
+{"name": "short agent name",
+ "scope": "one sentence",
+ "audience": "who uses it",
+ "tone": "how it should sound",
+ "must_answer": ["..."],
+ "must_refuse": ["..."]}

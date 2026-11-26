@@ -1,0 +1,17 @@
+### task: intake_questions
+Someone wants an AI assistant built. You are the engineer doing intake.
+
+Their brief:
+"""
+{brief}
+"""
+
+The document folder contains:
+{folder}
+
+Ask the clarifying questions whose answers would most change how the assistant is built
+(who uses it, what it must refuse, tone, which documents matter, what to do when the
+documents are silent). Do not ask about things the brief already answers.
+Ask at most 5. Fewer is better if the brief is clear.
+
+Return JSON: {"questions": ["...", "..."]}

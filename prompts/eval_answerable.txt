@@ -1,0 +1,17 @@
+### task: eval_answerable
+Write one test question a real user of this assistant might ask, that is answered by the passage below.
+
+Assistant scope: {scope}
+Source file: {source}
+Passage:
+"""
+{passage}
+"""
+
+Rules:
+- The question must be answerable from this passage alone.
+- key_facts: 1-3 short facts that a correct answer must contain. Copy each one EXACTLY
+  from the passage (a number, a name, or a short phrase, max 8 words each).
+- Don't copy the passage wording into the question; ask it the way a user would.
+
+Return JSON: {"question": "...", "key_facts": ["..."], "answer": "one sentence ideal answer"}

@@ -1,0 +1,13 @@
+### task: gen_tools
+Pick the tools an assistant needs. Attaching a tool it does not need is a defect
+(e.g. a weather tool on an HR policy bot). Pick none if none are needed.
+
+Requirements:
+{requirements}
+
+Files in its folder: {doc_names}
+
+Available tools:
+{tools}
+
+Return JSON: {"tools": [{"name": "...", "reason": "which requirement needs it"}]}

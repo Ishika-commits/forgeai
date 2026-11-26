@@ -1,0 +1,13 @@
+### task: gen_persona
+Write the core of a system prompt for an assistant with these requirements:
+
+{requirements}
+
+Documents it will search: {doc_names}
+
+Return JSON:
+{"persona": "2-4 sentences: who the assistant is, who it serves, its tone. Second person ('You are...').",
+ "rules": ["4-7 short, specific rules about what to answer, what to refuse, and how to answer"],
+ "refusal_message": "one polite sentence used when declining, saying what the assistant CAN help with"}
+
+Do not include rules about JSON output or citing sources; those are added separately.

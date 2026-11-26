@@ -1,0 +1,18 @@
+### task: eval_multidoc
+Write one test question that needs BOTH passages to answer fully.
+
+Assistant scope: {scope}
+Passage A (from {source_a}):
+"""
+{passage_a}
+"""
+Passage B (from {source_b}):
+"""
+{passage_b}
+"""
+
+key_facts_a: 1-2 short facts copied EXACTLY from passage A that the answer needs.
+key_facts_b: 1-2 short facts copied EXACTLY from passage B that the answer needs.
+If the passages are unrelated, still write a natural two-part question that touches both.
+
+Return JSON: {"question": "...", "key_facts_a": ["..."], "key_facts_b": ["..."]}

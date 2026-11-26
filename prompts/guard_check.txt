@@ -1,0 +1,15 @@
+### task: guard_check
+Can the passages below support answering user questions about this topic?
+
+Topic: {topic}
+
+Passages:
+"""
+{passages}
+"""
+
+Answer "yes" only if the passages contain actual facts about the topic (rules, numbers,
+procedures), not just a passing mention. If yes, copy one short exact sentence fragment
+from the passages as evidence (copy it character for character, max 20 words).
+
+Return JSON: {"supported": "yes" | "partial" | "no", "evidence": "exact fragment or empty"}

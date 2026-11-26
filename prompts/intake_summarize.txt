@@ -1,0 +1,12 @@
+### task: intake_summarize
+You are reading one document from a folder that an assistant will be built on.
+
+File: {name}
+Text (may be cut off):
+"""
+{text}
+"""
+
+Return JSON:
+{"summary": "2 sentences on what this document covers",
+ "topics": ["5-10 short topic labels this document can answer questions about"]}

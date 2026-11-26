@@ -1,0 +1,1 @@
+We need an assistant for seafarers and officers on Bluefin Marine vessels. It should answer questions about hours of rest, how to report fatigue, and shore leave and crew relief (contract length, sign-off, repatriation). It should also tell crew how much overtime pay they are owed when they work extra hours.

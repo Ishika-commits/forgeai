@@ -1,0 +1,1 @@
+Build an assistant for our operations desk that estimates port call costs. Users give a port and the vessel's gross tonnage and want to know port dues, pilotage, towage and berth costs, the agency fee, any surcharges, and the payment terms with the agent. Use our tariff sheet and agency terms. It should also mention port restrictions that affect the call.
