@@ -49,6 +49,16 @@ A web UI on top of the same pipeline, with no extra dependencies (standard-libra
 
 `FORGE_BACKEND=fake python server.py` runs everything against the scripted test model, so you can click through the UI without Ollama. Its scores mean nothing.
 
+## Hosted version (Render)
+
+`render.yaml` deploys the dashboard as a free Render web service. Ollama can't run on a free instance, so the hosted version calls a small open model (Llama 3.1 8B) through Groq's free OpenAI-compatible API instead.
+
+1. Create a free API key at console.groq.com.
+2. In Render: **New → Blueprint**, pick this repo, and paste the key into `OPENAI_API_KEY` when asked.
+3. Open the service URL. The committed runs in `runs/` show up straight away, and "Try the agent" and "New run" work through the API.
+
+Limits of the free tier: the service sleeps after 15 minutes idle (the first visit takes about a minute), and runs started on the hosted version are lost when it restarts. Only one run can go at a time.
+
 ## What happens in a run
 
 ```

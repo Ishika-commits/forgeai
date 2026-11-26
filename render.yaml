@@ -1,0 +1,22 @@
+# Render Blueprint: deploys the ForgeAI dashboard as a free web service.
+# Ollama can't run on the free instance, so the hosted version uses Groq's
+# OpenAI-compatible API with a small open model. Set OPENAI_API_KEY in Render.
+services:
+  - type: web
+    name: forgeai
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.7
+      - key: FORGE_BACKEND
+        value: openai
+      - key: OPENAI_BASE_URL
+        value: https://api.groq.com/openai/v1
+      - key: FORGE_MODEL
+        value: llama-3.1-8b-instant
+      - key: OPENAI_API_KEY
+        sync: false

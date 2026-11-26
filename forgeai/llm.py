@@ -62,8 +62,13 @@ class LLM:
                 "temperature": temperature, "max_tokens": max_tokens}
         if json_mode:
             body["response_format"] = {"type": "json_object"}
-        r = requests.post(f"{self.base_url}/chat/completions", json=body, timeout=300,
-                          headers={"Authorization": f"Bearer {self.api_key}"})
+        for attempt in range(5):
+            r = requests.post(f"{self.base_url}/chat/completions", json=body, timeout=300,
+                              headers={"Authorization": f"Bearer {self.api_key}"})
+            if r.status_code not in (429, 500, 502, 503):
+                break
+            # free hosted tiers rate-limit per minute; wait and retry
+            time.sleep(float(r.headers.get("retry-after", 2 ** attempt * 3)))
         r.raise_for_status()
         data = r.json()
         used = data.get("usage", {}).get("total_tokens", 0)

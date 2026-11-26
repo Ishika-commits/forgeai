@@ -129,6 +129,11 @@ def chat(body):
 def health():
     if os.getenv("FORGE_BACKEND") == "fake":
         return {"ok": True, "backend": "fake (test model; scores mean nothing)", "models": ["fake"]}
+    if os.getenv("FORGE_BACKEND") == "openai":
+        model = os.getenv("FORGE_MODEL", "llama-3.1-8b-instant")
+        if not os.getenv("OPENAI_API_KEY"):
+            return {"ok": False, "backend": "hosted API", "models": [model], "error": "OPENAI_API_KEY is not set"}
+        return {"ok": True, "backend": "hosted API", "models": [model], "default": model}
     url = os.getenv("OLLAMA_URL", "http://localhost:11434")
     try:
         tags = requests.get(f"{url}/api/tags", timeout=2).json()
@@ -194,6 +199,8 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send({"error": "Write a brief first."}, 400)
                 if not body.get("files") and not body.get("docs_dir"):
                     return self.send({"error": "Pick a demo folder or upload documents."}, 400)
+                if any(j["status"] == "running" for j in JOBS.values()):
+                    return self.send({"error": "A run is already in progress. Wait for it to finish."}, 409)
                 return self.send(start_job(body))
             if self.path == "/api/chat":
                 return self.send(chat(body))

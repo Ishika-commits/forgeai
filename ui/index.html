@@ -174,7 +174,7 @@ async function loadHealth(){
   try{
     const h = await api("/api/health"); state.health = h;
     $("#hdot").className = "dot " + (h.ok ? "ok" : "bad");
-    $("#htext").textContent = h.ok ? `${h.backend} · ${h.models.length} model${h.models.length==1?"":"s"}` : "Ollama not running";
+    $("#htext").textContent = h.ok ? `${h.backend} · ${h.models.length} model${h.models.length==1?"":"s"}` : (h.error || "Model not reachable");
     $("#htext").title = h.error || h.models.join(", ");
   }catch(e){ $("#htext").textContent = "Server not reachable"; }
 }
