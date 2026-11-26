@@ -1,9 +1,14 @@
 """Load a document folder: PDF, TXT, MD and CSV."""
 import csv
+import logging
 import os
 from dataclasses import dataclass, field
 
 from pypdf import PdfReader
+
+# pypdf logs harmless repair warnings ("incorrect startxref pointer") for slightly
+# damaged files; it still reads them fine, so keep the console clean.
+logging.getLogger("pypdf").setLevel(logging.ERROR)
 
 
 @dataclass
