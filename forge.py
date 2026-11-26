@@ -13,7 +13,7 @@ from forgeai.evalgen import generate_evals
 from forgeai.generator import generate
 from forgeai.intake import run_intake
 from forgeai.judge import Judge, scorecard
-from forgeai.llm import LLM
+from forgeai.llm import make_llm
 from forgeai.optimizer import optimize, run_evals
 from forgeai.report import build_report
 from forgeai.util import save_json
@@ -41,8 +41,8 @@ def main():
     os.makedirs(os.path.join(a.out, "iterations"))
     t0 = time.time()
 
-    llm = LLM(model=a.model, max_tokens_budget=a.budget)
-    judge_llm = LLM(model=a.judge_model) if a.judge_model else llm
+    llm = make_llm(model=a.model, max_tokens_budget=a.budget)
+    judge_llm = make_llm(model=a.judge_model) if a.judge_model else llm
     docs = load_folder(a.docs)
     if not docs:
         raise SystemExit(f"no readable documents in {a.docs}")

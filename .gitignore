@@ -5,3 +5,4 @@ __pycache__/
 runs/*/
 !runs/crew_rest/
 !runs/port_costs/
+uploads/

@@ -127,3 +127,14 @@ def load_prompt(prompt_name, **kwargs):
     for k, v in kwargs.items():
         text = text.replace("{" + k + "}", str(v))
     return text
+
+
+def make_llm(model=None, max_tokens_budget=None):
+    """FORGE_BACKEND=fake swaps in the scripted test model (tests/fake_llm.py).
+    For trying the UI and plumbing without Ollama only; its scores mean nothing."""
+    if os.getenv("FORGE_BACKEND") == "fake":
+        import sys
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "tests"))
+        from fake_llm import FakeLLM
+        return FakeLLM()
+    return LLM(model=model, max_tokens_budget=max_tokens_budget)

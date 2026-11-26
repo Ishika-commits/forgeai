@@ -3,7 +3,9 @@ without Ollama. It reads the '### task:' tag in each prompt and returns plausibl
 It is deliberately imperfect (wrong facts, leaky critic rules, weather tool on everything)
 so the factory's checks have something to catch."""
 import json
+import os
 import re
+import time
 
 
 def sentences(text):
@@ -33,6 +35,8 @@ class FakeLLM:
     def chat(self, messages, temperature=0.0, json_mode=False, max_tokens=800):
         self.calls += 1
         self.n += 1
+        if os.getenv("FAKE_DELAY"):
+            time.sleep(float(os.getenv("FAKE_DELAY")))
         user = messages[-1]["content"]
         m = re.search(r"### task: (\w+)", user)
         task = m.group(1) if m else ("agent" if "Context passages:" in user else "tools" if "Tools you may call" in user else "?")

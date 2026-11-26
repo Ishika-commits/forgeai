@@ -5,7 +5,7 @@
 import argparse
 
 from forgeai.agent import load_agent
-from forgeai.llm import LLM
+from forgeai.llm import make_llm
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     ap.add_argument("--debug", action="store_true", help="show retrieved chunks")
     a = ap.parse_args()
 
-    agent = load_agent(a.agent, LLM(model=a.model))
+    agent = load_agent(a.agent, make_llm(model=a.model))
     d = agent.defn
     print(f"\n{d['name']}  (tools: {', '.join(t['name'] for t in d['tools']) or 'none'})")
     print("Type a question, or 'quit'.\n")

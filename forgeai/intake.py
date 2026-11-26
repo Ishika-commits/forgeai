@@ -16,6 +16,7 @@ def describe_folder(docs, llm):
             p["summary"] = f"CSV table with {p['rows']} rows, columns: {', '.join(p['columns'])}"
             p["topics"] = p["columns"]
         else:
+            print(f"  reading {d.name}", flush=True)
             s = llm.ask_json(load_prompt("intake_summarize", name=d.name, text=d.text[:6000]))
             p["summary"] = s.get("summary", "")
             p["topics"] = s.get("topics", [])
@@ -32,6 +33,7 @@ def folder_text(profile):
 def interview(brief, profile, llm, auto):
     qs = llm.ask_json(load_prompt("intake_questions", brief=brief, folder=folder_text(profile))).get("questions", [])
     qs = [q for q in qs if isinstance(q, str) and q.strip()][:5]  # hard cap, whatever the model says
+    print(f"  {len(qs)} clarifying questions" + (" (answers assumed, --auto)" if auto else ""), flush=True)
     if not qs:
         return []
     if auto:
@@ -77,6 +79,7 @@ def groundability(req, docs, llm):
         else:
             status = "unsupported"
             why = f"model said '{claim}'" + ("" if verified or not evidence else "; its evidence quote was missing or not about the topic")
+        print(f"  groundability: {topic} -> {status}", flush=True)
         results.append({"topic": topic, "status": status, "why": why, "best_score": best,
                         "sources": sorted({h["source"] for h in hits[:2]}),
                         "model_claim": claim, "evidence_verified": verified})

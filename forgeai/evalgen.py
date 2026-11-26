@@ -53,6 +53,7 @@ def generate_evals(req, docs, llm, seed=13):
 
     def discard(kind, q, why):
         log["discarded"].append({"type": kind, "question": q, "why": why})
+        print(f"  thrown out ({kind}): {why[:90]}", flush=True)
 
     # 1. answerable: round-robin over documents so every doc is tested
     attempts, i = 0, 0
@@ -150,6 +151,9 @@ def generate_evals(req, docs, llm, seed=13):
             seen.append((q, []))
             cases.append({"type": "out_of_scope", "question": q, "expected_sources": [], "key_facts": [],
                           "should_refuse": True, "why_refuse": item.get("why_refuse", "") if isinstance(item, dict) else ""})
+
+    for t in TARGET:
+        print(f"  {t}: {sum(c['type'] == t for c in cases)} kept", flush=True)
 
     # ids + dev/holdout split (stratified). We optimise on dev only and report holdout
     # separately, so the loop can't just overfit the test set.

@@ -31,6 +31,24 @@ Useful flags: `--judge-model llama3.2:3b` uses a different model as the judge, `
 
 The client also speaks the OpenAI API format. Set `FORGE_BACKEND=openai`, `OPENAI_BASE_URL=...` and `FORGE_MODEL=...` to point it at LM Studio, vLLM, or anything else that serves that format.
 
+## Dashboard
+
+```bash
+python server.py          # then open http://localhost:8501
+```
+
+A web UI on top of the same pipeline, with no extra dependencies (standard-library server, one HTML page):
+
+- **New run.** Pick a demo or upload your own documents, write a brief, and watch the five stages progress with a live log.
+- **Results.** Pass rate, the honest holdout score, score per iteration, what each fix changed and whether it was kept, and every remaining failure grouped by cause.
+- **Requirements.** The groundability check, with the topics it flagged.
+- **Eval set.** Every generated case with its expected facts and result, plus the cases the checks threw out.
+- **Agent.** The system prompt (rules added by the fix loop are highlighted), retrieval settings, and the tool decisions with reasons.
+- **Try the agent.** Chat with the produced agent, next to the passages and tool calls it used for each answer.
+- **Report.** The rendered `report.md`.
+
+`FORGE_BACKEND=fake python server.py` runs everything against the scripted test model, so you can click through the UI without Ollama. Its scores mean nothing.
+
 ## What happens in a run
 
 ```

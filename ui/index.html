@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ForgeAI</title>
+<style>
+:root{
+  --paper:#EEF2F3; --panel:#FBFCFC; --ink:#13293D; --muted:#5B6B78; --rule:#C9D3D8; --rule-soft:#DFE6E9;
+  --route:#0E6E8C; --pass:#22735F; --warn:#B98410; --fail:#B8322A;
+  --pass-bg:#E2F0EB; --warn-bg:#F7EDD2; --fail-bg:#F6E1DF;
+  --head:"Bahnschrift","DIN Alternate","Roboto Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Segoe UI",Roboto,"Helvetica Neue",Arial,system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);font-variant-numeric:tabular-nums}
+button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--route);outline-offset:2px}
+h1,h2,h3{font-family:var(--head);font-weight:600;margin:0;letter-spacing:.01em}
+a{color:var(--route)}
+
+.app{display:grid;grid-template-columns:260px 1fr;height:100vh}
+aside{border-right:1px solid var(--rule);display:flex;flex-direction:column;background:var(--panel)}
+.brand{padding:18px 18px 14px;border-bottom:1px solid var(--rule)}
+.brand h1{font-size:26px;line-height:1}
+.brand p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.status{display:flex;gap:8px;align-items:center;font-size:12.5px;color:var(--muted);margin-top:10px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);flex:none}
+.dot.ok{background:var(--pass)} .dot.bad{background:var(--fail)}
+.newbtn{margin:14px 18px 6px;padding:9px 12px;border:1px solid var(--ink);background:var(--ink);color:#fff;border-radius:6px;cursor:pointer;font-weight:600}
+.newbtn:hover{background:#1d3d59}
+.runs-h{padding:14px 18px 6px;font-size:13px;color:var(--muted)}
+.runlist{overflow:auto;flex:1;padding:0 8px 16px}
+.runitem{display:block;width:100%;text-align:left;border:0;background:none;padding:10px;border-radius:6px;cursor:pointer;border-left:3px solid transparent}
+.runitem:hover{background:var(--paper)}
+.runitem.active{background:var(--paper);border-left-color:var(--route)}
+.runitem b{display:block;font-weight:600;font-size:14px}
+.runitem span{font-size:12.5px;color:var(--muted)}
+
+main{overflow:auto}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 36px 60px}
+.runhead h2{font-size:30px;line-height:1.15}
+.brief{margin:10px 0 0;color:var(--muted);max-width:78ch;border-left:3px solid var(--rule);padding-left:12px}
+
+/* the passage plan: the one bold element */
+.route{position:relative;margin:30px 0 8px;display:grid;grid-template-columns:repeat(5,1fr)}
+.route::before{content:"";position:absolute;left:10%;right:10%;top:15px;border-top:2px dashed var(--rule)}
+.route .done-line{position:absolute;left:10%;top:14px;height:4px;background:var(--route);border-radius:2px;transition:width .8s ease}
+.wp{position:relative;text-align:center;padding:0 6px}
+.wp .mark{width:32px;height:32px;margin:0 auto;border-radius:50%;background:var(--panel);border:2px solid var(--rule);display:grid;place-items:center;font:600 14px var(--head);color:var(--muted);position:relative;z-index:1}
+.wp.done .mark{background:var(--route);border-color:var(--route);color:#fff}
+.wp.now .mark{border-color:var(--route);color:var(--route);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 7px rgba(14,110,140,.15)}}
+@media (prefers-reduced-motion:reduce){.wp.now .mark{animation:none}.route .done-line{transition:none}}
+.wp h3{font-size:16px;margin-top:10px}
+.wp p{margin:2px 0 0;font-size:13px;color:var(--muted);line-height:1.35}
+.wp p strong{color:var(--ink);font-weight:600}
+
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--rule);margin:30px 0 22px;flex-wrap:wrap}
+.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px;font-weight:600}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ink)}
+
+.result{font-size:19px;max-width:70ch;margin:0 0 6px}
+.result strong{font-family:var(--head);font-size:24px}
+.note{color:var(--muted);font-size:13.5px;max-width:78ch}
+.grid2{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;margin-top:22px}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:18px 20px}
+.panel h3{font-size:18px;margin-bottom:10px}
+section{margin-top:30px}
+section>h3{font-size:20px;margin-bottom:10px}
+
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-weight:600;color:var(--muted);font-size:13px;padding:6px 10px;border-bottom:1px solid var(--rule)}
+td{padding:8px 10px;border-bottom:1px solid var(--rule-soft);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.chip{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.chip.pass{background:var(--pass-bg);color:var(--pass)} .chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.fail{background:var(--fail-bg);color:var(--fail)} .chip.plain{background:var(--rule-soft);color:var(--muted)}
+.facts{color:var(--muted);font-size:13px}
+
+.loglist{list-style:none;margin:0;padding:0}
+.loglist li{padding:12px 0 12px 22px;border-left:2px solid var(--rule);position:relative}
+.loglist li::before{content:"";position:absolute;left:-6px;top:17px;width:10px;height:10px;border-radius:50%;background:var(--panel);border:2px solid var(--route)}
+.loglist li.rev::before{border-color:var(--fail)}
+.loglist .ch{font-weight:600}
+.loglist .meta{font-size:13px;color:var(--muted)}
+
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filters button{border:1px solid var(--rule);background:var(--panel);border-radius:14px;padding:3px 11px;cursor:pointer;font-size:13px}
+.filters button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+.rules{margin:0;padding-left:22px}
+.rules li{margin:4px 0}
+.rules li.base{color:var(--muted)}
+.rules li.added{background:var(--warn-bg);border-radius:4px;padding:1px 6px}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:4px 12px;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0}
+
+/* chat */
+.chat{display:grid;grid-template-columns:1fr 380px;gap:22px;height:calc(100vh - 420px);min-height:420px}
+.msgs{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:16px;overflow:auto;display:flex;flex-direction:column;gap:12px}
+.msg{max-width:85%;padding:10px 13px;border-radius:10px;white-space:pre-wrap}
+.msg.you{align-self:flex-end;background:var(--ink);color:#fff;border-bottom-right-radius:3px}
+.msg.bot{align-self:flex-start;background:var(--paper);border-bottom-left-radius:3px}
+.msg.bot.refused{border:1px dashed var(--warn)}
+.msg .src{display:block;margin-top:6px;font-size:12.5px;color:var(--muted)}
+.ask{display:flex;gap:8px;margin-top:10px}
+.ask input{flex:1;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--panel)}
+.btn{padding:9px 16px;border-radius:6px;border:1px solid var(--ink);background:var(--ink);color:#fff;cursor:pointer;font-weight:600}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:var(--panel);color:var(--ink)}
+.evidence{overflow:auto}
+.passage{border-top:1px solid var(--rule-soft);padding:9px 0;font-size:13px}
+.passage b{font-size:12.5px}
+.passage div{color:var(--muted);margin-top:3px}
+.samples{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.samples button{border:1px solid var(--rule);background:var(--panel);border-radius:14px;padding:3px 10px;font-size:12.5px;cursor:pointer;text-align:left}
+
+/* new run */
+.form{display:grid;gap:16px;max-width:820px}
+.form label{font-weight:600;font-size:14px;display:block;margin-bottom:5px}
+.form textarea,.form input[type=text],.form select{width:100%;padding:10px 12px;border:1px solid var(--rule);border-radius:6px;background:var(--panel)}
+.presets{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.preset{border:1px solid var(--rule);background:var(--panel);border-radius:8px;padding:12px;text-align:left;cursor:pointer}
+.preset[aria-pressed=true]{border-color:var(--route);box-shadow:inset 0 0 0 1px var(--route)}
+.preset b{display:block}
+.preset span{font-size:12.5px;color:var(--muted)}
+.row{display:flex;gap:14px;align-items:end;flex-wrap:wrap}
+.console{background:#13293D;color:#D6E3EA;border-radius:8px;padding:14px 16px;font:12.5px/1.55 Consolas,"SF Mono",Menlo,monospace;height:340px;overflow:auto;white-space:pre-wrap;margin-top:18px}
+.err{color:var(--fail);font-weight:600}
+.empty{padding:60px 0;color:var(--muted);max-width:60ch}
+
+.md h1{font-size:26px;margin:0 0 10px} .md h2{font-size:21px;margin:26px 0 8px} .md h3{font-size:17px;margin:18px 0 6px}
+.md table{margin:8px 0 14px} .md blockquote{margin:10px 0;padding:8px 14px;background:var(--warn-bg);border-radius:6px}
+.md p{max-width:85ch}
+
+@media (max-width:900px){
+  .app{grid-template-columns:1fr} aside{display:none}
+  .grid2,.chat{grid-template-columns:1fr} .wrap{padding:20px} main{overflow-x:hidden}
+  .panel{overflow-x:auto} .route{max-width:100%}
+  .route{grid-template-columns:repeat(5,minmax(90px,1fr));overflow-x:auto}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside>
+    <div class="brand">
+      <h1>ForgeAI</h1>
+      <p>Builds, tests and fixes an agent from a brief and a folder of documents.</p>
+      <div class="status"><span class="dot" id="hdot"></span><span id="htext">Checking model…</span></div>
+    </div>
+    <button class="newbtn" onclick="showNew()">New run</button>
+    <div class="runs-h">Runs</div>
+    <nav class="runlist" id="runlist"></nav>
+  </aside>
+  <main><div class="wrap" id="view"></div></main>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pct = x => x == null ? "–" : Math.round(x) + "%";
+const api = async (url, body) => {
+  const r = await fetch(url, body ? {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body)} : {});
+  const j = await r.json(); if (!r.ok) throw new Error(j.error || r.statusText); return j;
+};
+const STAGES = ["Intake", "Eval set", "Agent", "Fix loop", "Report"];
+let state = {runs:[], run:null, tab:"results", health:null, evalFilter:"all", chat:{}};
+
+/* ---------- sidebar ---------- */
+async function loadHealth(){
+  try{
+    const h = await api("/api/health"); state.health = h;
+    $("#hdot").className = "dot " + (h.ok ? "ok" : "bad");
+    $("#htext").textContent = h.ok ? `${h.backend} · ${h.models.length} model${h.models.length==1?"":"s"}` : "Ollama not running";
+    $("#htext").title = h.error || h.models.join(", ");
+  }catch(e){ $("#htext").textContent = "Server not reachable"; }
+}
+async function loadRuns(select){
+  state.runs = await api("/api/runs");
+  $("#runlist").innerHTML = state.runs.map(r => `
+    <button class="runitem ${state.run && state.run.name==r.name ? "active":""}" onclick="openRun('${r.name}')">
+      <b>${esc(r.agent_name)}</b>
+      <span>${esc(r.name)} · ${r.final ? pct(r.final.overall) + " pass" : r.complete ? "done" : "in progress"}</span>
+    </button>`).join("") || `<p class="note" style="padding:0 10px">No runs yet.</p>`;
+  if (select) await openRun(select);
+  else if (!state.run && state.runs.length) await openRun(state.runs[0].name);
+  else if (!state.runs.length) showNew();
+}
+
+/* ---------- route (passage plan) ---------- */
+function routeHTML(stage, notes){
+  // stage: number of completed stages (0..5); stage index in progress gets .now
+  const w = Math.max(0, Math.min(stage, 4)) / 4 * 80;
+  return `<div class="route" aria-label="Pipeline progress">
+    <div class="done-line" style="width:${w}%"></div>
+    ${STAGES.map((s,i) => `<div class="wp ${i < stage ? "done" : i == stage ? "now" : ""}">
+       <div class="mark">${i+1}</div><h3>${s}</h3><p>${notes ? notes[i] : ""}</p></div>`).join("")}
+  </div>`;
+}
+function runNotes(d){
+  const req = d.requirements || {}, ev = (d.evalset||{}).generation_log || {}, ag = d.agent || {};
+  const hist = (d.iteration_log||[]).filter(h => h.scorecard);
+  const kept = hist.filter(h => h.accepted);
+  const first = hist[0]?.scorecard, last = kept[kept.length-1]?.scorecard;
+  const fails = (d.final_results||[]).filter(r => !r.passed).length;
+  return [
+    `${(req.must_answer||[]).length} topics to answer, <strong>${(req.unsupported_topics||[]).length} flagged</strong> as not in the docs`,
+    `<strong>${ev.kept ?? "–"} cases</strong> kept, ${(ev.discarded||[]).length} thrown out by checks`,
+    `${(ag.tools||[]).length ? "<strong>" + ag.tools.map(t=>t.name).join(", ") + "</strong>" : "<strong>no tools</strong>"} attached`,
+    first ? `<strong>${pct(first.overall)} → ${pct(last.overall)}</strong> over ${hist.length-1} fix${hist.length==2?"":"es"}` : "",
+    `<strong>${fails} still failing</strong>, explained`,
+  ];
+}
+
+/* ---------- run view ---------- */
+async function openRun(name){
+  const d = await api("/api/runs/" + name);
+  state.run = d; state.evalFilter = "all";
+  if (!state.chat[name]) state.chat[name] = [];
+  document.querySelectorAll(".runitem").forEach(b => b.classList.toggle("active", b.textContent.includes(name)));
+  renderRun();
+}
+function renderRun(){
+  const d = state.run, req = d.requirements || {};
+  const tabs = [["results","Results"],["requirements","Requirements"],["evals","Eval set"],["agent","Agent"],["chat","Try the agent"],["report","Report"]];
+  $("#view").innerHTML = `
+    <div class="runhead"><h2>${esc(req.name || d.name)}</h2>
+      <p class="brief">${esc(req.brief || (d.run_meta||{}).brief || "")}</p></div>
+    ${routeHTML(d.report ? 5 : 0, runNotes(d))}
+    <div class="tabs" role="tablist">${tabs.map(([k,l]) =>
+      `<button role="tab" aria-selected="${state.tab==k}" onclick="state.tab='${k}';renderRun()">${l}</button>`).join("")}</div>
+    <div id="tab"></div>`;
+  ({results:tabResults, requirements:tabReq, evals:tabEvals, agent:tabAgent, chat:tabChat, report:tabReport})[state.tab]();
+}
+
+function tabResults(){
+  const d = state.run, hist = d.iteration_log || [];
+  const cards = hist.filter(h => h.scorecard), kept = cards.filter(h => h.accepted);
+  const f = kept[kept.length-1]?.scorecard;
+  if (!f){ $("#tab").innerHTML = `<p class="empty">This run has no scores yet.</p>`; return; }
+  const fails = (d.final_results||[]).filter(r => !r.passed);
+  const byCat = {}; fails.forEach(r => (byCat[r.category] ||= []).push(r));
+  const explain = {retrieval_miss:"the passage with the answer was never retrieved", prompt_defect:"the passage was retrieved but the answer left facts out, skipped citations or broke format",
+    hallucination:"stated things that were not in the context, or answered something it should refuse", wrong_refusal:"refused although the answer was in front of it"};
+  $("#tab").innerHTML = `
+    <p class="result"><strong>${f.passed}/${f.n} cases pass (${pct(f.overall)})</strong>. On held-out questions it never trained against: ${pct(f.holdout)}.</p>
+    <p class="note">Correct ${pct(f.correct_rate)} · grounded ${pct(f.grounded_rate)} · refuses out-of-scope ${pct(f.refusal_accuracy)}. Fixes were chosen on dev cases only, so holdout is the honest number.</p>
+    <div class="grid2">
+      <div class="panel"><h3>Score per iteration</h3>${chartSVG(cards)}</div>
+      <div class="panel"><h3>By question type</h3><table>
+        ${Object.entries(f.by_type).map(([t,v]) => `<tr><td>${t.replaceAll("_"," ")}</td><td style="width:55%">${bar(v)}</td><td style="text-align:right">${pct(v)}</td></tr>`).join("")}
+      </table></div>
+    </div>
+    <section><h3>What the loop changed</h3><ul class="loglist">
+      ${hist.slice(1).map(h => h.stopped
+        ? `<li><div class="ch">Iteration ${h.iteration}: stopped</div><div class="meta">${esc(h.stopped)}</div></li>`
+        : `<li class="${h.accepted ? "" : "rev"}"><div class="ch">Iteration ${h.iteration}: ${esc(h.change)}</div>
+           <div class="meta">Targeted ${esc(h.targeted_category.replaceAll("_"," "))} (${h.targeted_cases.length} dev cases). Why: ${esc(h.why)}.${h.note ? " Note: " + esc(h.note) + "." : ""}</div>
+           <div class="meta">Dev ${pct(h.score_before.dev)} → ${pct(h.score_after.dev)}, holdout ${pct(h.score_before.holdout)} → ${pct(h.score_after.holdout)}.
+           Fixed ${h.fixed.length}, broke ${h.newly_broken.length}. <span class="chip ${h.accepted?"pass":"fail"}">${h.accepted ? "kept" : "reverted"}</span></div></li>`).join("") || "<li>No iterations ran.</li>"}
+    </ul></section>
+    <section><h3>Still failing, and why</h3>
+      ${fails.length ? Object.entries(byCat).map(([c, rs]) => `
+        <div class="panel" style="margin-bottom:14px"><h3>${c.replaceAll("_"," ")} <span class="chip fail">${rs.length}</span></h3>
+        <p class="note" style="margin-top:-4px">${explain[c]||""}</p>
+        <table><tr><th>Case</th><th>Question</th><th>Detail</th></tr>
+        ${rs.map(r => `<tr><td>${r.id}<br><span class="chip plain">${r.split}</span></td><td>${esc(r.question)}</td><td class="facts">${esc(r.reason)}</td></tr>`).join("")}</table></div>`).join("")
+        : `<p class="note">Nothing in this eval set. With ~20 generated cases, treat that with suspicion.</p>`}
+    </section>`;
+}
+function bar(v){ const c = v==null ? "plain" : v>=75 ? "pass" : v>=50 ? "warn" : "fail";
+  return `<div style="height:8px;background:var(--rule-soft);border-radius:4px"><div style="height:8px;width:${v||0}%;border-radius:4px;background:var(--${c=="plain"?"muted":c})"></div></div>`; }
+function chartSVG(cards){
+  const W=420,H=190,L=34,B=26,T=10,R=46, n=cards.length;
+  const x = i => L + (n==1 ? (W-L-R)/2 : i*(W-L-R)/(n-1)), y = v => T + (100-(v||0))*(H-T-B)/100;
+  const line = (k,col,dash) => `<polyline fill="none" stroke="${col}" stroke-width="2.5" ${dash?'stroke-dasharray="5 4"':""} points="${cards.map((c,i)=>x(i)+","+y(c.scorecard[k])).join(" ")}"/>`+
+    cards.map((c,i)=>`<circle cx="${x(i)}" cy="${y(c.scorecard[k])}" r="${c.accepted?4:3.5}" fill="${c.accepted?col:"#fff"}" stroke="${col}" stroke-width="2"><title>${k} ${pct(c.scorecard[k])}</title></circle>`).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="Dev and holdout score per iteration">
+    ${[0,25,50,75,100].map(v=>`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#DFE6E9"/><text x="${L-6}" y="${y(v)+4}" font-size="11" text-anchor="end" fill="#5B6B78">${v}</text>`).join("")}
+    ${cards.map((c,i)=>`<text x="${x(i)}" y="${H-6}" font-size="11" text-anchor="middle" fill="#5B6B78">${i==0?"baseline":"iter "+c.iteration}${c.accepted?"":" (reverted)"}</text>`).join("")}
+    ${line("dev","#0E6E8C")}${line("holdout","#13293D",true)}
+  </svg><p class="note" style="margin:4px 0 0">Solid: dev. Dashed: holdout. Hollow points are fixes that were reverted.</p>`;
+}
+
+function tabReq(){
+  const r = state.run.requirements || {};
+  const st = {supported:"pass", weak:"warn", unsupported:"fail"};
+  $("#tab").innerHTML = `
+    ${(r.unsupported_topics||[]).length ? `<div class="panel" style="border-color:var(--fail);background:var(--fail-bg)"><h3>Flagged before building</h3>
+      The brief asks for <b>${r.unsupported_topics.map(esc).join(", ")}</b>, but the documents don't cover it. The agent will refuse these instead of guessing.</div>` : ""}
+    <div class="grid2">
+      <div class="panel"><h3>Scope</h3><dl class="kv"><dt>Scope</dt><dd>${esc(r.scope)}</dd><dt>Audience</dt><dd>${esc(r.audience)}</dd><dt>Tone</dt><dd>${esc(r.tone)}</dd></dl></div>
+      <div class="panel"><h3>Answer / refuse</h3><dl class="kv"><dt>Must answer</dt><dd>${(r.must_answer||[]).map(esc).join("<br>")}</dd>
+        <dt>Must refuse</dt><dd>${(r.must_refuse||[]).map(esc).join("<br>")}</dd></dl></div>
+    </div>
+    <section><h3>Groundability check</h3><p class="note">The model's "yes, the documents cover this" only counts if it quotes the passage exactly, and the quote is about the topic.</p>
+      <div class="panel"><table><tr><th>Topic</th><th>Status</th><th>Why</th></tr>
+      ${(r.groundability||[]).map(g => `<tr><td>${esc(g.topic)}</td><td><span class="chip ${st[g.status]}">${g.status}</span></td><td class="facts">${esc(g.why)}</td></tr>`).join("")}</table></div></section>
+    <section><h3>Intake questions</h3><div class="panel"><table><tr><th>Question</th><th>Answer</th></tr>
+      ${(r.qa||[]).map(q => `<tr><td>${esc(q.question)}</td><td>${esc(q.answer)} ${q.assumed?'<span class="chip plain">assumed</span>':""}</td></tr>`).join("") || "<tr><td colspan=2>No questions asked.</td></tr>"}</table></div></section>`;
+}
+
+function tabEvals(){
+  const ev = state.run.evalset || {cases:[], generation_log:{discarded:[]}};
+  const res = Object.fromEntries((state.run.final_results||[]).map(r => [r.id, r]));
+  const types = ["all","answerable","multi_doc","ambiguous","out_of_scope","failing"];
+  const f = state.evalFilter;
+  const cases = ev.cases.filter(c => f=="all" || c.type==f || (f=="failing" && res[c.id] && !res[c.id].passed));
+  const log = ev.generation_log;
+  $("#tab").innerHTML = `
+    <p class="note">Generated from the documents, not written by hand. Every expected fact was checked against its source passage before the case was kept.
+      ${log.kept} kept out of ${log.generated} generated.</p>
+    <div class="filters">${types.map(t => `<button aria-pressed="${f==t}" onclick="state.evalFilter='${t}';tabEvals()">${t.replaceAll("_"," ")}</button>`).join("")}</div>
+    <div class="panel"><table><tr><th>Case</th><th>Question</th><th>Expected</th><th>Result</th></tr>
+    ${cases.map(c => { const r = res[c.id]; return `<tr><td>${c.id}<br><span class="chip plain">${c.type.replaceAll("_"," ")}</span> <span class="chip plain">${c.split}</span></td>
+      <td>${esc(c.question)}${r ? `<div class="facts" style="margin-top:4px">Agent: ${esc((r.answer||"").slice(0,220))}</div>` : ""}</td>
+      <td class="facts">${c.should_refuse ? "should refuse" : c.key_facts.map(esc).join("<br>") + "<br><i>" + c.expected_sources.map(esc).join(", ") + "</i>"}</td>
+      <td>${r ? `<span class="chip ${r.passed?"pass":"fail"}">${r.passed?"pass":r.category.replaceAll("_"," ")}</span>` : ""}</td></tr>`; }).join("")}
+    </table></div>
+    <section><h3>Thrown out by the checks (${log.discarded.length})</h3>
+      <p class="note">The generator's own mistakes. A small model writing its own exam invents facts; these are the ones that were caught.</p>
+      <div class="panel"><table><tr><th>Type</th><th>Question</th><th>Why</th></tr>
+      ${log.discarded.map(x => `<tr><td>${x.type.replaceAll("_"," ")}</td><td>${esc(x.question)}</td><td class="facts">${esc(x.why)}</td></tr>`).join("") || "<tr><td colspan=3>None.</td></tr>"}</table></div></section>`;
+}
+
+function tabAgent(){
+  const a = state.run.agent || {}, td = (state.run.run_meta||{}).tool_decisions || [];
+  const base = 3;  // generator.BASE_RULES
+  const added = new Set((state.run.iteration_log||[]).filter(h => h.accepted && h.change && h.change.startsWith("added rule")).map(h => h.change.slice(12, -1)));
+  $("#tab").innerHTML = `
+    <div class="grid2">
+      <div class="panel"><h3>System prompt</h3><p>${esc(a.persona)}</p>
+        <ol class="rules">${(a.rules||[]).map((r,i) => `<li class="${i<base?"base":""} ${added.has(r)?"added":""}">${esc(r)}</li>`).join("")}</ol>
+        <p class="note">Grey: grounding rules every agent gets. Highlighted: added by the fix loop. Refusal: "${esc(a.refusal_message)}"</p></div>
+      <div>
+        <div class="panel"><h3>Retrieval</h3><dl class="kv">${Object.entries(a.retrieval||{}).map(([k,v]) => `<dt>${k.replaceAll("_"," ")}</dt><dd>${esc(v)}</dd>`).join("")}
+          <dt>output</dt><dd>JSON: answer, sources, refused</dd><dt>version</dt><dd>${a.version}</dd></dl></div>
+        <div class="panel" style="margin-top:18px"><h3>Tools</h3><table>
+          ${td.map(t => `<tr><td>${t.tool}</td><td><span class="chip ${t.decision=="attached"?"pass":t.decision=="rejected"?"fail":"plain"}">${t.decision}</span></td><td class="facts">${esc(t.why)}</td></tr>`).join("")}</table>
+          <p class="note">A tool is attached only if the model picks it and a plain-code rule agrees the brief needs it.</p></div>
+      </div>
+    </div>`;
+}
+
+function tabChat(){
+  const name = state.run.name, msgs = state.chat[name];
+  const samples = ((state.run.evalset||{}).cases||[]).filter(c => c.type!="ambiguous").slice(0,3).map(c=>c.question)
+     .concat(((state.run.evalset||{}).cases||[]).filter(c=>c.type=="out_of_scope").slice(0,1).map(c=>c.question));
+  $("#tab").innerHTML = `
+    <div class="chat">
+      <div style="display:flex;flex-direction:column;min-height:0">
+        <div class="msgs" id="msgs">${msgs.length ? msgs.map(msgHTML).join("") : `<p class="note">Ask the agent anything. It answers only from its documents and shows what it used on the right.</p>`}</div>
+        <form class="ask" onsubmit="send(event)"><input id="q" placeholder="Ask a question…" autocomplete="off" aria-label="Question"><button class="btn" id="sendbtn">Send</button></form>
+        <div class="samples">${[...new Set(samples)].map(s => `<button onclick="$('#q').value=this.textContent;$('#q').focus()">${esc(s)}</button>`).join("")}</div>
+      </div>
+      <div class="panel evidence" id="evidence"><h3>What it used</h3><p class="note">Retrieved passages and tool calls for the last answer show up here.</p></div>
+    </div>`;
+  const last = [...msgs].reverse().find(m => m.out); if (last) showEvidence(last.out);
+  $("#msgs").scrollTop = 1e9;
+}
+function msgHTML(m){
+  if (m.role=="you") return `<div class="msg you">${esc(m.text)}</div>`;
+  if (m.error) return `<div class="msg bot"><span class="err">${esc(m.error)}</span></div>`;
+  const o = m.out;
+  return `<div class="msg bot ${o.refused?"refused":""}">${esc(o.answer)}<span class="src">${o.refused ? "refused" : (o.sources||[]).length ? "Source: " + o.sources.map(esc).join(", ") : "no source cited"}${(o.tool_calls||[]).length ? " · used " + o.tool_calls.map(t=>t.tool).join(", ") : ""}</span></div>`;
+}
+function showEvidence(o){
+  $("#evidence").innerHTML = `<h3>What it used</h3>
+    ${(o.tool_calls||[]).map(t => `<div class="passage"><b>Tool: ${esc(t.tool)}</b><div>${esc(JSON.stringify(t.args))}<br>→ ${esc(JSON.stringify(t.result).slice(0,300))}</div></div>`).join("")}
+    ${(o.retrieved||[]).map(h => `<div class="passage"><b>${esc(h.source)}</b> <span class="chip plain">score ${h.score}</span><div>${esc(h.text.slice(0,320))}${h.text.length>320?"…":""}</div></div>`).join("") || `<p class="note">Nothing relevant was retrieved, so the agent should refuse.</p>`}`;
+}
+async function send(e){
+  e.preventDefault();
+  const q = $("#q").value.trim(); if (!q) return;
+  const name = state.run.name, msgs = state.chat[name];
+  msgs.push({role:"you", text:q}); $("#q").value = ""; $("#sendbtn").disabled = true;
+  $("#msgs").innerHTML = msgs.map(msgHTML).join("") + `<div class="msg bot note">Thinking…</div>`; $("#msgs").scrollTop = 1e9;
+  try{ const out = await api("/api/chat", {run:name, question:q}); msgs.push({role:"bot", out}); }
+  catch(err){ msgs.push({role:"bot", error:err.message}); }
+  if (state.tab=="chat" && state.run.name==name) tabChat();
+}
+
+function tabReport(){ $("#tab").innerHTML = `<div class="panel md">${md(state.run.report || "No report yet.")}</div>`; }
+function md(src){
+  const lines = src.split("\n"), out = []; let i = 0;
+  const inline = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/`(.+?)`/g,"<code>$1</code>").replace(/_\((.+?)\)_/g,"<i>($1)</i>");
+  while (i < lines.length){
+    const l = lines[i];
+    if (/^\|/.test(l)){ const rows=[]; while(i<lines.length && /^\|/.test(lines[i])) rows.push(lines[i++]);
+      const cells = r => r.replace(/^\||\|$/g,"").split("|").map(c=>c.trim());
+      out.push("<table><tr>"+cells(rows[0]).map(c=>"<th>"+inline(c)+"</th>").join("")+"</tr>"+rows.slice(2).map(r=>"<tr>"+cells(r).map(c=>"<td>"+inline(c)+"</td>").join("")+"</tr>").join("")+"</table>"); continue; }
+    if (/^### /.test(l)) out.push("<h3>"+inline(l.slice(4))+"</h3>");
+    else if (/^## /.test(l)) out.push("<h2>"+inline(l.slice(3))+"</h2>");
+    else if (/^# /.test(l)) out.push("<h1>"+inline(l.slice(2))+"</h1>");
+    else if (/^> /.test(l)) out.push("<blockquote>"+inline(l.slice(2))+"</blockquote>");
+    else if (/^\s*- /.test(l)){ const items=[]; while(i<lines.length && /^\s*- /.test(lines[i])) items.push(lines[i++]);
+      out.push("<ul>"+items.map(x=>`<li${/^\s{2,}/.test(x)?' style="margin-left:18px"':""}>${inline(x.replace(/^\s*- /,""))}</li>`).join("")+"</ul>"); continue; }
+    else if (l.trim()) out.push("<p>"+inline(l)+"</p>");
+    i++;
+  }
+  return out.join("");
+}
+
+/* ---------- new run ---------- */
+let demosCache = [], form = {preset:null, files:[]};
+async function showNew(){
+  state.run = null; document.querySelectorAll(".runitem").forEach(b => b.classList.remove("active"));
+  if (!demosCache.length) demosCache = await api("/api/demos").catch(() => []);
+  const h = state.health || {models:[]};
+  $("#view").innerHTML = `
+    <div class="runhead"><h2>New run</h2><p class="brief">Write what the agent should do and give it documents. ForgeAI runs unattended: it assumes answers to its intake questions and records them as assumptions.</p></div>
+    ${routeHTML(-1)}
+    <div class="form" style="margin-top:28px">
+      <div><label>Start from a demo</label><div class="presets">${demosCache.map(d => `
+        <button class="preset" aria-pressed="${form.preset==d.name}" onclick="pickDemo('${d.name}')"><b>${d.name.replaceAll("_"," ")}</b><span>${d.files.map(esc).join(", ")}</span></button>`).join("")}</div></div>
+      <div><label for="brief">Brief</label><textarea id="brief" rows="4" placeholder="I need an assistant that answers … for …">${esc(form.brief||"")}</textarea></div>
+      <div><label for="files">Documents</label>
+        <input type="file" id="files" multiple accept=".pdf,.txt,.md,.csv" onchange="pickFiles(this)">
+        <p class="note" id="docnote">${form.preset ? "Using the demo folder: " + esc(form.docs_dir) : form.files.length ? form.files.length + " files ready" : "PDF, TXT, MD or CSV."}</p></div>
+      <div class="row">
+        <div style="flex:1;min-width:180px"><label for="rname">Run name</label><input type="text" id="rname" value="${esc(form.name||"")}" placeholder="hr_policy_bot"></div>
+        <div style="flex:1;min-width:180px"><label for="model">Model</label><select id="model">${(h.models.length?h.models:["qwen2.5:3b"]).map(m=>`<option ${m==h.default?"selected":""}>${esc(m)}</option>`).join("")}</select></div>
+        <label style="font-weight:400;display:flex;gap:6px;align-items:center;margin-bottom:10px"><input type="checkbox" id="tour"> Prompt tournament</label>
+      </div>
+      <div><button class="btn" id="go" onclick="startRun()">Build the agent</button> <span id="formerr" class="err"></span></div>
+    </div>
+    <div id="live"></div>`;
+}
+function pickDemo(n){ const d = demosCache.find(x => x.name==n); form = {preset:n, brief:d.brief, docs_dir:d.docs_dir, name:n, files:[]}; showNew(); }
+async function pickFiles(inp){
+  form.files = await Promise.all([...inp.files].map(f => new Promise(res => { const r = new FileReader(); r.onload = () => res({name:f.name, data:r.result}); r.readAsDataURL(f); })));
+  form.preset = null; form.docs_dir = null; $("#docnote").textContent = form.files.length + " files ready";
+  document.querySelectorAll(".preset").forEach(b => b.setAttribute("aria-pressed","false"));
+}
+async function startRun(){
+  $("#formerr").textContent = "";
+  const body = {brief:$("#brief").value, name:$("#rname").value || undefined, model:$("#model").value, tournament:$("#tour").checked};
+  if (form.files.length) body.files = form.files; else if (form.docs_dir) body.docs_dir = form.docs_dir;
+  try{
+    const job = await api("/api/forge", body);
+    $("#go").disabled = true;
+    document.querySelector(".form").style.display = "none";
+    document.querySelector(".runhead h2").textContent = "Building " + (body.name || "your agent");
+    document.querySelector(".runhead .brief").textContent = body.brief;
+    $("#live").innerHTML = `<div class="console" id="console" aria-live="polite">Starting…</div>`;
+    poll(job.id);
+  }catch(e){ $("#formerr").textContent = e.message; }
+}
+async function poll(id){
+  const j = await api("/api/jobs/" + id);
+  const route = document.querySelector(".route"); if (route) route.outerHTML = routeHTML(j.stage ? j.stage - 1 : 0);
+  const c = $("#console"); if (c){ c.textContent = j.lines.join("\n"); c.scrollTop = 1e9; }
+  if (j.status == "running") return setTimeout(() => poll(id), 800);
+  if (j.status == "done"){ form = {preset:null, files:[]}; state.tab = "results"; await loadRuns(j.run); }
+  else { document.querySelector(".form").style.display = ""; $("#formerr").textContent = "The run failed. The log below shows where."; $("#go").disabled = false; }
+}
+
+loadHealth(); loadRuns();
+setInterval(loadHealth, 15000);
+</script>
+</body>
+</html>
