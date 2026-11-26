@@ -53,6 +53,15 @@ def retrieval_params(docs):
             "top_k": 5 if any(d.kind == "csv" for d in docs) else 4, "min_score": 0.02}
 
 
+def docs_path_for(docs_dir, out_dir):
+    """Relative path when possible so a run folder can be moved with the repo.
+    On Windows there is no relative path between drives (C: vs D:), so fall back to absolute."""
+    try:
+        return os.path.relpath(os.path.abspath(docs_dir), os.path.abspath(out_dir))
+    except ValueError:
+        return os.path.abspath(docs_dir)
+
+
 def generate(req, docs, docs_dir, out_dir, llm, temperature=0.0):
     p = llm.ask_json(load_prompt("gen_persona", requirements=short_req(req),
                                  doc_names=[d.name for d in docs]), temperature=temperature)
@@ -73,6 +82,6 @@ def generate(req, docs, docs_dir, out_dir, llm, temperature=0.0):
         "output_contract": {"format": "json", "fields": {"answer": "string", "sources": "list of file names",
                                                          "refused": "boolean"}},
         "temperature": 0.0,
-        "docs_dir": os.path.relpath(os.path.abspath(docs_dir), os.path.abspath(out_dir)),
+        "docs_dir": docs_path_for(docs_dir, out_dir),
     }
     return defn, decisions
