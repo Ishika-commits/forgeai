@@ -173,6 +173,14 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send(open(UI, "rb").read(), ctype="text/html; charset=utf-8")
             if p == "/api/health":
                 return self.send(health())
+            if p == "/api/check":
+                # one tiny real model call, so a bad key or model name shows up at once
+                t0 = time.time()
+                try:
+                    out = make_llm().ask("Reply with the single word: ok", max_tokens=10)
+                    return self.send({"ok": True, "reply": out[:50], "seconds": round(time.time() - t0, 1)})
+                except Exception as e:
+                    return self.send({"ok": False, "error": str(e)[:600]})
             if p == "/api/demos":
                 return self.send(demos())
             if p == "/api/runs":

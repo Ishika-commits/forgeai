@@ -51,7 +51,7 @@ class LLM:
         }
         if json_mode:
             body["format"] = "json"
-        r = requests.post(f"{self.base_url}/api/chat", json=body, timeout=300)
+        r = requests.post(f"{self.base_url}/api/chat", json=body, timeout=600)
         r.raise_for_status()
         data = r.json()
         used = data.get("prompt_eval_count", 0) + data.get("eval_count", 0)
@@ -63,7 +63,7 @@ class LLM:
         if json_mode:
             body["response_format"] = {"type": "json_object"}
         for attempt in range(5):
-            r = requests.post(f"{self.base_url}/chat/completions", json=body, timeout=300,
+            r = requests.post(f"{self.base_url}/chat/completions", json=body, timeout=120,
                               headers={"Authorization": f"Bearer {self.api_key}"})
             if r.status_code == 400 and "response_format" in body:
                 # some providers reject JSON mode; parse_json copes with plain text
@@ -72,8 +72,11 @@ class LLM:
             if r.status_code not in (429, 500, 502, 503):
                 break
             # free hosted tiers rate-limit per minute; wait and retry
-            time.sleep(float(r.headers.get("retry-after", 2 ** attempt * 3)))
-        r.raise_for_status()
+            wait = min(float(r.headers.get("retry-after", 2 ** attempt * 3)), 60)
+            print(f"  [api] HTTP {r.status_code}, retrying in {wait:.0f}s: {r.text[:200]}", flush=True)
+            time.sleep(wait)
+        if r.status_code >= 400:
+            raise RuntimeError(f"API error HTTP {r.status_code}: {r.text[:500]}")
         data = r.json()
         used = data.get("usage", {}).get("total_tokens", 0)
         return data["choices"][0]["message"]["content"], used
