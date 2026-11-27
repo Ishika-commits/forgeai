@@ -57,7 +57,8 @@ def docs_path_for(docs_dir, out_dir):
     """Relative path when possible so a run folder can be moved with the repo.
     On Windows there is no relative path between drives (C: vs D:), so fall back to absolute."""
     try:
-        return os.path.relpath(os.path.abspath(docs_dir), os.path.abspath(out_dir))
+        # forward slashes so a run made on Windows still loads on Linux (Render)
+        return os.path.relpath(os.path.abspath(docs_dir), os.path.abspath(out_dir)).replace("\\", "/")
     except ValueError:
         return os.path.abspath(docs_dir)
 

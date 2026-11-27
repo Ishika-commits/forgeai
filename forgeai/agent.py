@@ -20,7 +20,8 @@ class Agent:
     def __init__(self, defn, llm, base_dir="."):
         self.defn = defn
         self.llm = llm
-        self.docs_dir = os.path.join(base_dir, defn["docs_dir"]) if not os.path.isabs(defn["docs_dir"]) else defn["docs_dir"]
+        docs = defn["docs_dir"].replace("\\", "/")  # runs made on Windows store backslashes
+        self.docs_dir = os.path.normpath(docs if os.path.isabs(docs) else os.path.join(base_dir, docs))
         r = defn["retrieval"]
         self.index = Index(load_folder(self.docs_dir), r["chunk_size"], r["overlap"], r.get("method", "tfidf"))
         self.system = render_system_prompt(defn)
@@ -87,6 +88,6 @@ def load_agent(path, llm):
         defn = json.load(f)
     base = os.path.dirname(os.path.abspath(path))
     # iteration snapshots live one folder down from the run folder
-    if not os.path.isdir(os.path.join(base, defn["docs_dir"])):
+    if not os.path.isdir(os.path.join(base, defn["docs_dir"].replace("\\", "/"))):
         base = os.path.dirname(base)
     return Agent(defn, llm, base_dir=base)
