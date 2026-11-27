@@ -25,13 +25,17 @@ class Judge:
         self.llm_calls = 0
         self.disagreements = 0
 
-    def fact_present(self, fact, answer):
+    def fact_present(self, fact, answer, question=""):
         s = fact_in_text(fact, answer)
         if s >= 0.9:
             return True, "string match"
         fact_nums = numbers_in(fact)
         if fact_nums and not fact_nums <= numbers_in(answer):
             return False, "number missing"
+        # a short answer like "77" to "how many hours of rest...?" is right: the numbers
+        # are in the answer and the other words are already in the question
+        if fact_nums and fact_in_text(fact, answer + " " + question) >= 0.9:
+            return True, "number in answer, wording in question"
         if s == 0 and not answer.strip():
             return False, "empty answer"
         # unsure -> ask the model twice, in both orders
@@ -86,7 +90,7 @@ class Judge:
                 res["category"], res["reason"] = "retrieval_miss", "refused, and the retriever never surfaced the needed passage"
             return res
 
-        checks = [self.fact_present(f, answer) for f in facts]
+        checks = [self.fact_present(f, answer, case["question"]) for f in facts]
         present = [c[0] for c in checks]
         res["fact_checks"] = [{"fact": f, "present": p, "how": how} for f, (p, how) in zip(facts, checks)]
         if any(c[1] == "judge_unsure" for c in checks):

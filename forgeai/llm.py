@@ -27,11 +27,19 @@ class LLM:
         self.calls = 0
         self.tokens = 0
         self.seconds = 0.0
+        # free hosted tiers allow N requests/minute; spacing calls beats hitting 429s
+        self.min_interval = float(os.getenv("FORGE_MIN_INTERVAL", "0"))
+        self._last = 0.0
 
     # ---- low level -------------------------------------------------------
     def chat(self, messages, temperature=0.0, json_mode=False, max_tokens=800):
         if self.budget and self.tokens >= self.budget:
             raise BudgetExceeded(f"token budget {self.budget} used up")
+        if self.min_interval:
+            gap = time.time() - self._last
+            if gap < self.min_interval:
+                time.sleep(self.min_interval - gap)
+            self._last = time.time()
         t0 = time.time()
         if self.backend == "ollama":
             text, used = self._ollama(messages, temperature, json_mode, max_tokens)

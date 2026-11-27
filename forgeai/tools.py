@@ -65,7 +65,9 @@ def _words(req):
     # only what the agent must DO. must_refuse is left out on purpose: an HR bot that
     # must refuse weather questions should not get a weather tool.
     import json
-    keep = {k: req.get(k) for k in ("brief", "scope", "must_answer", "answers")}
+    # The raw brief is left out too: it can ask for things the guard already moved to
+    # must-refuse (e.g. "how much overtime pay" with no pay documents).
+    keep = {k: req.get(k) for k in ("scope", "must_answer")}
     return json.dumps(keep).lower()
 
 

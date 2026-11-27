@@ -29,6 +29,22 @@ def verified_facts(facts, passage):
     return [str(f) for f in (facts or []) if str(f).strip() and fact_in_text(f, passage) >= 0.9]
 
 
+def useful_facts(facts, question, answer=None):
+    """A key fact is only worth testing if it is short, not already in the question,
+    and (when the generator wrote an ideal answer) actually used in that answer.
+    Small models copy whole sentences or unrelated fragments from the passage."""
+    out = []
+    for f in facts:
+        if len(f.split()) > 10:
+            continue
+        if fact_in_text(f, question) >= 0.9:
+            continue
+        if answer and fact_in_text(f, answer) < 0.6:
+            continue
+        out.append(f)
+    return out
+
+
 def is_dup(q, facts, seen):
     """Near-identical wording AND the same expected facts. Two tariff questions that
     differ only in the port name are different tests, not duplicates."""
@@ -72,13 +88,14 @@ def generate_evals(req, docs, llm, seed=13):
             discard("answerable", "", "bad JSON")
             continue
         q = str(r.get("question", "")).strip()
-        facts = verified_facts(r.get("key_facts"), ch["text"])
+        in_source = verified_facts(r.get("key_facts"), ch["text"])
+        facts = useful_facts(in_source, q, str(r.get("answer", "")))
         if len(q) < 10:
             discard("answerable", q, "question too short")
-        elif not facts:
+        elif not in_source:
             discard("answerable", q, f"none of the key facts {r.get('key_facts')} appear in the source passage")
-        elif all(fact_in_text(f, q) >= 0.9 for f in facts):
-            discard("answerable", q, "question gives away its own answer")
+        elif not facts:
+            discard("answerable", q, f"key facts {in_source} are too long, repeat the question, or are not used in the generator's own answer")
         elif is_dup(q, facts, seen):
             discard("answerable", q, "duplicate")
         else:
@@ -107,7 +124,8 @@ def generate_evals(req, docs, llm, seed=13):
             discard("multi_doc", "", "bad JSON")
             continue
         q = str(r.get("question", "")).strip()
-        fa, fb = verified_facts(r.get("key_facts_a"), a["text"]), verified_facts(r.get("key_facts_b"), b["text"])
+        fa = useful_facts(verified_facts(r.get("key_facts_a"), a["text"]), str(r.get("question", "")))
+        fb = useful_facts(verified_facts(r.get("key_facts_b"), b["text"]), str(r.get("question", "")))
         if not fa or not fb:
             discard("multi_doc", q, "needs a verified fact from BOTH passages")
         elif is_dup(q, fa + fb, seen):
