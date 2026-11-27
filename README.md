@@ -51,7 +51,7 @@ A web UI on top of the same pipeline, with no extra dependencies (standard-libra
 
 ## Hosted version (Render)
 
-`render.yaml` deploys the dashboard as a free Render web service. Ollama can't run on a free instance, so the hosted version calls a hosted model through an OpenAI-compatible API instead: Gemini by default (`gemini-3.8-flash`), or Groq's Llama 3.1 8B by changing two settings (see the comments in `render.yaml`). The committed demo runs in `runs/` were made locally with qwen2.5:3b through Ollama.
+`render.yaml` deploys the dashboard as a free Render web service. Ollama can't run on a free instance, so the hosted version calls a hosted model through an OpenAI-compatible API instead: Gemini by default (`gemini-2.5-flash-lite`), or Groq's Llama 3.1 8B by changing two settings (see the comments in `render.yaml`). The committed demo runs in `runs/` were made locally with qwen2.5:3b through Ollama.
 
 1. Create a free API key at aistudio.google.com/apikey.
 2. In Render: **New → Blueprint**, pick this repo, and paste the key into `OPENAI_API_KEY` when asked.
