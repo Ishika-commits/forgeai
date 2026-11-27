@@ -1,0 +1,189 @@
+[
+  {
+    "iteration": 0,
+    "change": null,
+    "scorecard": {
+      "overall": 47.8,
+      "dev": 40.0,
+      "holdout": 62.5,
+      "by_type": {
+        "answerable": 33.3,
+        "multi_doc": 66.7,
+        "ambiguous": 33.3,
+        "out_of_scope": 80.0
+      },
+      "grounded_rate": 100.0,
+      "correct_rate": 38.9,
+      "refusal_accuracy": 80.0,
+      "failures": {
+        "prompt_defect": 11,
+        "retrieval_miss": 1
+      },
+      "n": 23,
+      "passed": 11
+    },
+    "accepted": true
+  },
+  {
+    "iteration": 1,
+    "targeted_category": "prompt_defect",
+    "category_counts_dev": {
+      "prompt_defect": 8,
+      "retrieval_miss": 1
+    },
+    "change": "added rule: \"When answering, include all critical information and context provided in the question or context, ensuring no essential details are omitted.\"",
+    "why": "the right passage was retrieved but the answer left facts out or skipped citations",
+    "note": "",
+    "targeted_cases": [
+      "case_02",
+      "case_03",
+      "case_05",
+      "case_07",
+      "case_10",
+      "case_11",
+      "case_15",
+      "case_20"
+    ],
+    "fixed": [
+      "case_20"
+    ],
+    "newly_broken": [
+      "case_06",
+      "case_21"
+    ],
+    "score_before": {
+      "dev": 40.0,
+      "holdout": 62.5,
+      "overall": 47.8
+    },
+    "score_after": {
+      "dev": 33.3,
+      "holdout": 62.5,
+      "overall": 43.5
+    },
+    "scorecard": {
+      "overall": 43.5,
+      "dev": 33.3,
+      "holdout": 62.5,
+      "by_type": {
+        "answerable": 25.0,
+        "multi_doc": 66.7,
+        "ambiguous": 33.3,
+        "out_of_scope": 80.0
+      },
+      "grounded_rate": 100.0,
+      "correct_rate": 33.3,
+      "refusal_accuracy": 80.0,
+      "failures": {
+        "prompt_defect": 12,
+        "retrieval_miss": 1
+      },
+      "n": 23,
+      "passed": 10
+    },
+    "accepted": false,
+    "decision": "reverted (dev score did not improve)"
+  },
+  {
+    "iteration": 2,
+    "targeted_category": "retrieval_miss",
+    "category_counts_dev": {
+      "prompt_defect": 8,
+      "retrieval_miss": 1
+    },
+    "change": "retrieval.top_k 4 -> 6",
+    "why": "needed passages were not in the top results; widen the net",
+    "note": "",
+    "targeted_cases": [
+      "case_18"
+    ],
+    "fixed": [
+      "case_20"
+    ],
+    "newly_broken": [],
+    "score_before": {
+      "dev": 40.0,
+      "holdout": 62.5,
+      "overall": 47.8
+    },
+    "score_after": {
+      "dev": 46.7,
+      "holdout": 62.5,
+      "overall": 52.2
+    },
+    "scorecard": {
+      "overall": 52.2,
+      "dev": 46.7,
+      "holdout": 62.5,
+      "by_type": {
+        "answerable": 33.3,
+        "multi_doc": 66.7,
+        "ambiguous": 33.3,
+        "out_of_scope": 100.0
+      },
+      "grounded_rate": 100.0,
+      "correct_rate": 38.9,
+      "refusal_accuracy": 100.0,
+      "failures": {
+        "prompt_defect": 9,
+        "wrong_refusal": 1,
+        "retrieval_miss": 1
+      },
+      "n": 23,
+      "passed": 12
+    },
+    "accepted": true,
+    "decision": "kept (dev score improved)"
+  },
+  {
+    "iteration": 3,
+    "targeted_category": "retrieval_miss",
+    "category_counts_dev": {
+      "prompt_defect": 6,
+      "wrong_refusal": 1,
+      "retrieval_miss": 1
+    },
+    "change": "retrieval.chunk_size 140 -> 91 (overlap 30)",
+    "why": "facts were buried in long chunks that scored low; smaller chunks match questions more tightly",
+    "note": "",
+    "targeted_cases": [
+      "case_18"
+    ],
+    "fixed": [],
+    "newly_broken": [
+      "case_06"
+    ],
+    "score_before": {
+      "dev": 46.7,
+      "holdout": 62.5,
+      "overall": 52.2
+    },
+    "score_after": {
+      "dev": 40.0,
+      "holdout": 62.5,
+      "overall": 47.8
+    },
+    "scorecard": {
+      "overall": 47.8,
+      "dev": 40.0,
+      "holdout": 62.5,
+      "by_type": {
+        "answerable": 25.0,
+        "multi_doc": 66.7,
+        "ambiguous": 33.3,
+        "out_of_scope": 100.0
+      },
+      "grounded_rate": 100.0,
+      "correct_rate": 33.3,
+      "refusal_accuracy": 100.0,
+      "failures": {
+        "prompt_defect": 11,
+        "retrieval_miss": 1
+      },
+      "n": 23,
+      "passed": 11
+    },
+    "accepted": false,
+    "decision": "reverted (dev score did not improve)"
+  }
+]

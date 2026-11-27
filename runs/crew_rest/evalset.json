@@ -1,0 +1,401 @@
+{
+  "cases": [
+    {
+      "type": "answerable",
+      "question": "What is the time frame within which the Master must send a copy of the FR-02 to the DPA?",
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "48 hours"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "fatigue_reporting_procedure.pdf#2"
+      ],
+      "reference_answer": "The Master must send a copy of every FR-02 to the Designated Person Ashore (DPA) within 48 hours of receiving it.",
+      "split": "holdout",
+      "id": "case_01"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the maximum time frame within which the head of department must report any breach of the minimum hours of rest to the Master?",
+      "expected_sources": [
+        "hours_of_rest_policy.pdf"
+      ],
+      "key_facts": [
+        "24 hours",
+        "Master records",
+        "breaches to the office"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "hours_of_rest_policy.pdf#5"
+      ],
+      "reference_answer": "The head of department must report any breach of the minimum hours of rest to the Master within 24 hours.",
+      "split": "dev",
+      "id": "case_02"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the minimum time required for a seafarer to rest before the ship's departure?",
+      "expected_sources": [
+        "shore_leave_and_relief_policy.pdf"
+      ],
+      "key_facts": [
+        "2 hours before departure",
+        "Anyone who expects to be late must call",
+        "normal contract length is 4 months for officers"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "shore_leave_and_relief_policy.pdf#1"
+      ],
+      "reference_answer": "",
+      "split": "dev",
+      "id": "case_03"
+    },
+    {
+      "type": "answerable",
+      "question": "What should a seafarer do if they feel fatigued or notice fatigue in a colleague?",
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "report fatigue",
+        "tell head of department",
+        "complete fatigue report form"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "fatigue_reporting_procedure.pdf#1"
+      ],
+      "reference_answer": "A seafarer who feels fatigued or notices fatigue in a colleague should tell their head of department straight away and complete the fatigue report form FR-02.",
+      "split": "holdout",
+      "id": "case_04"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the minimum number of hours of rest required in a 7-day period?",
+      "expected_sources": [
+        "hours_of_rest_policy.pdf"
+      ],
+      "key_facts": [
+        "77 hours of rest",
+        "7-day period"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "hours_of_rest_policy.pdf#1"
+      ],
+      "reference_answer": "Every seafarer must have at least 77 hours of rest in any 7-day period.",
+      "split": "dev",
+      "id": "case_05"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the policy regarding who can go ashore?",
+      "expected_sources": [
+        "shore_leave_and_relief_policy.pdf"
+      ],
+      "key_facts": [
+        "Shore leave",
+        "Master decides"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "shore_leave_and_relief_policy.pdf#0"
+      ],
+      "reference_answer": "The Master decides who may go ashore and when.",
+      "split": "dev",
+      "id": "case_06"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the policy of Bluefin Marine regarding the reporting of fatigue?",
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "no-blame policy",
+        "safety action",
+        "no discipline"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "fatigue_reporting_procedure.pdf#0"
+      ],
+      "reference_answer": "Bluefin Marine operates a no-blame policy: no seafarer will be disciplined or lose pay for reporting that they or a colleague are fatigued.",
+      "split": "dev",
+      "id": "case_07"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the primary responsibility of the Master when a situation at sea is resolved?",
+      "expected_sources": [
+        "hours_of_rest_policy.pdf"
+      ],
+      "key_facts": [
+        "board or cargo",
+        "every seafarer who worked during a scheduled rest period"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "hours_of_rest_policy.pdf#6"
+      ],
+      "reference_answer": "",
+      "split": "holdout",
+      "id": "case_08"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the maximum notice period required for a seafarer to request sign-off at the end of their contract?",
+      "expected_sources": [
+        "shore_leave_and_relief_policy.pdf"
+      ],
+      "key_facts": [
+        "Extensions beyond 30 days are not allowed",
+        "Requesting sign-off at the end of contract"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "shore_leave_and_relief_policy.pdf#2"
+      ],
+      "reference_answer": "A seafarer who wants to sign off at the end of their contract must give at least 60 days notice to the Master, who passes it to the crewing department.",
+      "split": "holdout",
+      "id": "case_09"
+    },
+    {
+      "type": "answerable",
+      "question": "What is the minimum rating a seafarer must have to report anonymously for fatigue issues?",
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "7. Anonymous reporting",
+        "A seafarer who does not want to report through the ship can report anonymously"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "fatigue_reporting_procedure.pdf#3"
+      ],
+      "reference_answer": "A seafarer who rates themselves at 7 or higher must report fatigue issues anonymously by email to fatigue@bluefinmarine.example.",
+      "split": "dev",
+      "id": "case_10"
+    },
+    {
+      "type": "answerable",
+      "question": "How often are seafarer's hours of rest records checked?",
+      "expected_sources": [
+        "hours_of_rest_policy.pdf"
+      ],
+      "key_facts": [
+        "Records Each seafarer records their own hours of rest daily",
+        "The head of department checks the records weekly",
+        "The Master signs the records at the end of each month"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "hours_of_rest_policy.pdf#4"
+      ],
+      "reference_answer": "Seafarer's hours of rest records are checked daily by the seafarer themselves, weekly by the head of department, and monthly by the Master.",
+      "split": "dev",
+      "id": "case_11"
+    },
+    {
+      "type": "answerable",
+      "question": "What happens if a seafarer needs to leave before their contract ends for personal reasons?",
+      "expected_sources": [
+        "shore_leave_and_relief_policy.pdf"
+      ],
+      "key_facts": [
+        "repatriation costs may be recovered",
+        "seafarer asks to leave before contract ends",
+        "personal reasons"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "shore_leave_and_relief_policy.pdf#3"
+      ],
+      "reference_answer": "If a seafarer asks to leave before the contract ends for personal reasons, repatriation costs may be recovered from them, except in cases of family emergency.",
+      "split": "dev",
+      "id": "case_12"
+    },
+    {
+      "type": "multi_doc",
+      "question": "According to the shore leave and relief policy, what happens if a seafarer asks to leave before the contract ends for personal reasons? And, according to the hours of rest policy, what is the duration for which the records are kept on board?",
+      "expected_sources": [
+        "shore_leave_and_relief_policy.pdf",
+        "hours_of_rest_policy.pdf"
+      ],
+      "key_facts": [
+        "repatriation costs may be recovered from them",
+        "except in cases of family emergency",
+        "records are kept on board for 3 years",
+        "the seafarer receives a signed copy"
+      ],
+      "should_refuse": false,
+      "origin": [
+        "shore_leave_and_relief_policy.pdf#3",
+        "hours_of_rest_policy.pdf#4"
+      ],
+      "split": "holdout",
+      "id": "case_13"
+    },
+    {
+      "type": "multi_doc",
+      "question": "According to the policies outlined in the 'hours_of_rest_policy.pdf' and the 'fatigue_reporting_procedure.pdf', what must the head of department do if they observe a breach of the hours of rest schedule, and what should a seafarer do if they feel fatigued or notice fatigue in a colleague?",
+      "expected_sources": [
+        "hours_of_rest_policy.pdf",
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "The head of department must report any breach to the Master within 24 hours.",
+        "The completed fatigue report form (FR-02) should be submitted to the Master within 24 hours."
+      ],
+      "should_refuse": false,
+      "origin": [
+        "hours_of_rest_policy.pdf#5",
+        "fatigue_reporting_procedure.pdf#1"
+      ],
+      "split": "dev",
+      "id": "case_14"
+    },
+    {
+      "type": "multi_doc",
+      "question": "According to the shore leave and crew relief policy, when a seafarer is entitled to shore leave, who decides who may go ashore and when? Additionally, in the fatigue reporting procedure, why is it important to report fatigue early and what are some common signs of fatigue?",
+      "expected_sources": [
+        "shore_leave_and_relief_policy.pdf",
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "Seafarers are entitled to shore leave when the ship is in port, subject to operational needs, port security rules and local immigration requirements.",
+        "The Master decides who may go ashore and when.",
+        "Fatigue causes mistakes.",
+        "Common signs of fatigue include difficulty concentrating."
+      ],
+      "should_refuse": false,
+      "origin": [
+        "shore_leave_and_relief_policy.pdf#0",
+        "fatigue_reporting_procedure.pdf#0"
+      ],
+      "split": "dev",
+      "id": "case_15"
+    },
+    {
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "48 hours"
+      ],
+      "origin": [
+        "fatigue_reporting_procedure.pdf#2"
+      ],
+      "type": "ambiguous",
+      "question": "When do I gotta send a copy of FR-02 to DPA? btw, in what time frame?",
+      "should_refuse": false,
+      "rewrite_of": "What is the time frame within which the Master must send a copy of the FR-02 to the DPA?",
+      "split": "dev",
+      "id": "case_16"
+    },
+    {
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "7. Anonymous reporting",
+        "A seafarer who does not want to report through the ship can report anonymously"
+      ],
+      "origin": [
+        "fatigue_reporting_procedure.pdf#3"
+      ],
+      "type": "ambiguous",
+      "question": "What's the min rating a seafarer need 2 report 2 anon for fatigue probs?",
+      "should_refuse": false,
+      "rewrite_of": "What is the minimum rating a seafarer must have to report anonymously for fatigue issues?",
+      "split": "holdout",
+      "id": "case_17"
+    },
+    {
+      "expected_sources": [
+        "fatigue_reporting_procedure.pdf"
+      ],
+      "key_facts": [
+        "report fatigue",
+        "tell head of department",
+        "complete fatigue report form"
+      ],
+      "origin": [
+        "fatigue_reporting_procedure.pdf#1"
+      ],
+      "type": "ambiguous",
+      "question": "If I'm tired or see a buddy is tired at sea, what do I do??",
+      "should_refuse": false,
+      "rewrite_of": "What should a seafarer do if they feel fatigued or notice fatigue in a colleague?",
+      "split": "dev",
+      "id": "case_18"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "Can you help me calculate my overtime pay for this week?",
+      "expected_sources": [],
+      "key_facts": [],
+      "should_refuse": true,
+      "why_refuse": "The assistant is for seafarers and officers on Bluefin Marine vessels, and it does not cover overtime pay calculation, which is not within its scope.",
+      "split": "dev",
+      "id": "case_19"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "How can I report fatigue when I'm feeling under the influence of alcohol?",
+      "expected_sources": [],
+      "key_facts": [],
+      "should_refuse": true,
+      "why_refuse": "Under the influence of drugs or alcohol is a must-refuse topic. The assistant is not designed to assist with this issue.",
+      "split": "dev",
+      "id": "case_20"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "Can you give me financial advice on how to save money while on a ship?",
+      "expected_sources": [],
+      "key_facts": [],
+      "should_refuse": true,
+      "why_refuse": "Personal financial advice is a must-refuse topic. The assistant is not equipped to provide financial advice.",
+      "split": "dev",
+      "id": "case_21"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "I heard some political stuff lately, can you tell me what the crew should think about it?",
+      "expected_sources": [],
+      "key_facts": [],
+      "should_refuse": true,
+      "why_refuse": "Political or controversial topics are must-refuse topics. The assistant is not designed to discuss such matters.",
+      "split": "holdout",
+      "id": "case_22"
+    },
+    {
+      "type": "out_of_scope",
+      "question": "I need someone to give me religious or cultural advice about my shipmates' beliefs and practices.",
+      "expected_sources": [],
+      "key_facts": [],
+      "should_refuse": true,
+      "why_refuse": "Religious or cultural advice not related to maritime regulations is a must-refuse topic. The assistant is not equipped to provide such advice.",
+      "split": "holdout",
+      "id": "case_23"
+    }
+  ],
+  "generation_log": {
+    "generated": 24,
+    "kept": 23,
+    "discarded": [],
+    "by_type": {
+      "answerable": 12,
+      "multi_doc": 3,
+      "ambiguous": 3,
+      "out_of_scope": 5
+    }
+  }
+}

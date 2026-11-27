@@ -1,0 +1,43 @@
+{
+  "model": "qwen2.5:3b",
+  "judge_model": "qwen2.5:3b",
+  "llm_calls": 373,
+  "tokens": 180150,
+  "seconds": 34872,
+  "brief": "We need an assistant for seafarers and officers on Bluefin Marine vessels. It should answer questions about hours of rest, how to report fatigue, and shore leave and crew relief (contract length, sign-off, repatriation). It should also tell crew how much overtime pay they are owed when they work extra hours.",
+  "docs": "D:\\forgeai\\demos/crew_rest/docs",
+  "auto": true,
+  "tool_decisions": [
+    {
+      "tool": "calculator",
+      "model_said": "attach",
+      "model_reason": "to calculate overtime pay, which is not covered by the documents but may be requested by the audience",
+      "decision": "attached",
+      "why": "requirement check passed"
+    },
+    {
+      "tool": "csv_lookup",
+      "model_said": "attach",
+      "model_reason": "to find specific information in the 'fatigue_reporting_procedure.pdf', 'hours_of_rest_policy.pdf', and 'shore_leave_and_relief_policy.pdf' files",
+      "decision": "rejected",
+      "why": "rule: only when the folder contains a CSV file"
+    },
+    {
+      "tool": "current_date",
+      "model_said": "attach",
+      "model_reason": "to provide current date and weekday information, which is relevant for some policies and procedures",
+      "decision": "rejected",
+      "why": "rule: only when answers depend on today's date (deadlines, expiry, days remaining)"
+    },
+    {
+      "tool": "weather",
+      "model_said": "skip",
+      "decision": "not attached",
+      "why": "model did not pick it"
+    }
+  ],
+  "judge": {
+    "llm_judge_calls": 154,
+    "judge_disagreements": 16
+  }
+}

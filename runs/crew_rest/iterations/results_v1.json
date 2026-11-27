@@ -1,0 +1,759 @@
+[
+  {
+    "id": "case_01",
+    "type": "answerable",
+    "split": "holdout",
+    "question": "What is the time frame within which the Master must send a copy of the FR-02 to the DPA?",
+    "answer": "The Master must send a copy of every FR-02 to the Designated Person Ashore (DPA) within 48 hours of receiving it.",
+    "refused": false,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 1,
+    "fact_checks": [
+      {
+        "fact": "48 hours",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 1.0,
+    "correct": true,
+    "grounded": true,
+    "passed": true
+  },
+  {
+    "id": "case_02",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What is the maximum time frame within which the head of department must report any breach of the minimum hours of rest to the Master?",
+    "answer": "The head of department must report any breach of the minimum hours of rest to the Master within 24 hours.",
+    "refused": false,
+    "cited": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 3,
+    "fact_checks": [
+      {
+        "fact": "24 hours",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "Master records",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "breaches to the office",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      }
+    ],
+    "coverage": 0.33,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['Master records', 'breaches to the office']"
+  },
+  {
+    "id": "case_03",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What is the minimum time required for a seafarer to rest before the ship's departure?",
+    "answer": "Seafarers on shore leave must return on board at least 2 hours before the ship's scheduled departure time.",
+    "refused": false,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 3,
+    "fact_checks": [
+      {
+        "fact": "2 hours before departure",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "Anyone who expects to be late must call",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "normal contract length is 4 months for officers",
+        "present": false,
+        "how": "number missing"
+      }
+    ],
+    "coverage": 0.33,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['Anyone who expects to be late must call', 'normal contract length is 4 months for officers']"
+  },
+  {
+    "id": "case_04",
+    "type": "answerable",
+    "split": "holdout",
+    "question": "What should a seafarer do if they feel fatigued or notice fatigue in a colleague?",
+    "answer": "A seafarer who feels fatigued, or who sees fatigue in a colleague, should tell their head of department straight away and complete the fatigue report form FR-02. The completed form should be sent to the Master within 24 hours.",
+    "refused": false,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 3,
+    "fact_checks": [
+      {
+        "fact": "report fatigue",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "tell head of department",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "complete fatigue report form",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 1.0,
+    "correct": true,
+    "grounded": true,
+    "passed": true
+  },
+  {
+    "id": "case_05",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What is the minimum number of hours of rest required in a 7-day period?",
+    "answer": "77 hours",
+    "refused": false,
+    "cited": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "77 hours of rest",
+        "present": false,
+        "how": "judge_unsure"
+      },
+      {
+        "fact": "7-day period",
+        "present": false,
+        "how": "number missing"
+      }
+    ],
+    "judge_unsure": true,
+    "coverage": 0.0,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['77 hours of rest', '7-day period']"
+  },
+  {
+    "id": "case_06",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What is the policy regarding who can go ashore?",
+    "answer": "The Master decides who may go ashore and when.",
+    "refused": false,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "Shore leave",
+        "present": false,
+        "how": "judge_unsure"
+      },
+      {
+        "fact": "Master decides",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "judge_unsure": true,
+    "coverage": 0.5,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['Shore leave']"
+  },
+  {
+    "id": "case_07",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What is the policy of Bluefin Marine regarding the reporting of fatigue?",
+    "answer": "The policy of Bluefin Marine regarding the reporting of fatigue is that a seafarer who feels fatigued, or who sees fatigue in a colleague, should tell their head of department straight away and complete a fatigue report form FR-02. The completed form goes to the Master within 24 hours. The Master reviews each FR-02 and decides on immediate measures such as a rest period, changing the watch, or adding a second person on the bridge.",
+    "refused": false,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 3,
+    "fact_checks": [
+      {
+        "fact": "no-blame policy",
+        "present": false,
+        "how": "judge_unsure"
+      },
+      {
+        "fact": "safety action",
+        "present": false,
+        "how": "judge_unsure"
+      },
+      {
+        "fact": "no discipline",
+        "present": false,
+        "how": "judge_unsure"
+      }
+    ],
+    "judge_unsure": true,
+    "coverage": 0.0,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['no-blame policy', 'safety action', 'no discipline']"
+  },
+  {
+    "id": "case_08",
+    "type": "answerable",
+    "split": "holdout",
+    "question": "What is the primary responsibility of the Master when a situation at sea is resolved?",
+    "answer": "The Master must make sure that every seafarer who worked during a scheduled rest period gets an adequate period of rest.",
+    "refused": false,
+    "cited": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "board or cargo",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "every seafarer who worked during a scheduled rest period",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 0.5,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['board or cargo']"
+  },
+  {
+    "id": "case_09",
+    "type": "answerable",
+    "split": "holdout",
+    "question": "What is the maximum notice period required for a seafarer to request sign-off at the end of their contract?",
+    "answer": "The maximum notice period required for a seafarer to request sign-off at the end of their contract is 60 days.",
+    "refused": false,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "Extensions beyond 30 days are not allowed",
+        "present": false,
+        "how": "number missing"
+      },
+      {
+        "fact": "Requesting sign-off at the end of contract",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 0.5,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['Extensions beyond 30 days are not allowed']"
+  },
+  {
+    "id": "case_10",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What is the minimum rating a seafarer must have to report anonymously for fatigue issues?",
+    "answer": "Anyone who feels fatigued, or who sees fatigue in a colleague, should tell their head of department straight away and complete fatigue report form FR-02. The completed form goes to the Master within 24 hours.",
+    "refused": false,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "7. Anonymous reporting",
+        "present": false,
+        "how": "number missing"
+      },
+      {
+        "fact": "A seafarer who does not want to report through the ship can report anonymously",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      }
+    ],
+    "coverage": 0.0,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['7. Anonymous reporting', 'A seafarer who does not want to report through the ship can report anonymously']"
+  },
+  {
+    "id": "case_11",
+    "type": "answerable",
+    "split": "dev",
+    "question": "How often are seafarer's hours of rest records checked?",
+    "answer": "The head of department checks the records weekly.",
+    "refused": false,
+    "cited": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 3,
+    "fact_checks": [
+      {
+        "fact": "Records Each seafarer records their own hours of rest daily",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "The head of department checks the records weekly",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "The Master signs the records at the end of each month",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      }
+    ],
+    "coverage": 0.33,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['Records Each seafarer records their own hours of rest daily', 'The Master signs the records at the end of each month']"
+  },
+  {
+    "id": "case_12",
+    "type": "answerable",
+    "split": "dev",
+    "question": "What happens if a seafarer needs to leave before their contract ends for personal reasons?",
+    "answer": "If a seafarer asks to leave before the contract ends for personal reasons, repatriation costs may be recovered from them, except in cases of family emergency.",
+    "refused": false,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 3,
+    "fact_checks": [
+      {
+        "fact": "repatriation costs may be recovered",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "seafarer asks to leave before contract ends",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "personal reasons",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 1.0,
+    "correct": true,
+    "grounded": true,
+    "passed": true
+  },
+  {
+    "id": "case_13",
+    "type": "multi_doc",
+    "split": "holdout",
+    "question": "According to the shore leave and relief policy, what happens if a seafarer asks to leave before the contract ends for personal reasons? And, according to the hours of rest policy, what is the duration for which the records are kept on board?",
+    "answer": "According to the shore leave and relief policy, if a seafarer asks to leave before the contract ends for personal reasons, repatriation costs may be recovered from them, except in cases of family emergency. According to the hours of rest policy, the records are kept on board for 3 years.",
+    "refused": false,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 4,
+    "fact_checks": [
+      {
+        "fact": "repatriation costs may be recovered from them",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "except in cases of family emergency",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "records are kept on board for 3 years",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "the seafarer receives a signed copy",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      }
+    ],
+    "coverage": 0.75,
+    "correct": true,
+    "grounded": true,
+    "passed": true
+  },
+  {
+    "id": "case_14",
+    "type": "multi_doc",
+    "split": "dev",
+    "question": "According to the policies outlined in the 'hours_of_rest_policy.pdf' and the 'fatigue_reporting_procedure.pdf', what must the head of department do if they observe a breach of the hours of rest schedule, and what should a seafarer do if they feel fatigued or notice fatigue in a colleague?",
+    "answer": "According to the policies, if the head of department observes a breach of the hours of rest schedule, they must report it to the Master within 24 hours. If a seafarer feels fatigued or notices fatigue in a colleague, they should tell their head of department straight away and complete the fatigue report form FR-02. The completed form should be sent to the Master within 24 hours.",
+    "refused": false,
+    "cited": [
+      "hours_of_rest_policy.pdf",
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "The head of department must report any breach to the Master within 24 hours.",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "The completed fatigue report form (FR-02) should be submitted to the Master within 24 hours.",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 1.0,
+    "correct": true,
+    "grounded": true,
+    "passed": true
+  },
+  {
+    "id": "case_15",
+    "type": "multi_doc",
+    "split": "dev",
+    "question": "According to the shore leave and crew relief policy, when a seafarer is entitled to shore leave, who decides who may go ashore and when? Additionally, in the fatigue reporting procedure, why is it important to report fatigue early and what are some common signs of fatigue?",
+    "answer": "According to the shore leave and crew relief policy, the Master decides who may go ashore and when. In the fatigue reporting procedure, it is important to report fatigue early because it is a safety action and Bluefin Marine operates a no-blame policy. Common signs of fatigue include difficulty concentrating, slow reactions, nodding off on watch, irritability, headaches, and forgetting routine steps.",
+    "refused": false,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf",
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 4,
+    "fact_checks": [
+      {
+        "fact": "Seafarers are entitled to shore leave when the ship is in port, subject to operational needs, port security rules and local immigration requirements.",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "The Master decides who may go ashore and when.",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "Fatigue causes mistakes.",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "Common signs of fatigue include difficulty concentrating.",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 0.5,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['Seafarers are entitled to shore leave when the ship is in port, subject to operational needs, port security rules and local immigration requirements.', 'Fatigue causes mistakes.']"
+  },
+  {
+    "id": "case_16",
+    "type": "ambiguous",
+    "split": "dev",
+    "question": "When do I gotta send a copy of FR-02 to DPA? btw, in what time frame?",
+    "answer": "The Master must send a copy of every FR-02 to the Designated Person Ashore (DPA) within 48 hours of receiving it.",
+    "refused": false,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 1,
+    "fact_checks": [
+      {
+        "fact": "48 hours",
+        "present": true,
+        "how": "string match"
+      }
+    ],
+    "coverage": 1.0,
+    "correct": true,
+    "grounded": true,
+    "passed": true
+  },
+  {
+    "id": "case_17",
+    "type": "ambiguous",
+    "split": "holdout",
+    "question": "What's the min rating a seafarer need 2 report 2 anon for fatigue probs?",
+    "answer": "7",
+    "refused": false,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [
+      "calculator"
+    ],
+    "facts_in_context": 2,
+    "fact_checks": [
+      {
+        "fact": "7. Anonymous reporting",
+        "present": true,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "A seafarer who does not want to report through the ship can report anonymously",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      }
+    ],
+    "coverage": 0.5,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "prompt_defect",
+    "reason": "facts were retrieved but left out of the answer: ['A seafarer who does not want to report through the ship can report anonymously']"
+  },
+  {
+    "id": "case_18",
+    "type": "ambiguous",
+    "split": "dev",
+    "question": "If I'm tired or see a buddy is tired at sea, what do I do??",
+    "answer": "If you're tired or see a buddy is tired at sea, you should report it according to the fatigue reporting procedure outlined in the hours of rest policy. You should not rely on personal judgment or ignore the situation; instead, you should follow the established reporting process to ensure the safety and well-being of the crew.",
+    "refused": false,
+    "cited": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "retrieved_sources": [
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "facts_in_context": 0,
+    "fact_checks": [
+      {
+        "fact": "report fatigue",
+        "present": true,
+        "how": "string match"
+      },
+      {
+        "fact": "tell head of department",
+        "present": false,
+        "how": "llm judge (agreed twice)"
+      },
+      {
+        "fact": "complete fatigue report form",
+        "present": false,
+        "how": "judge_unsure"
+      }
+    ],
+    "judge_unsure": true,
+    "coverage": 0.33,
+    "correct": false,
+    "grounded": true,
+    "passed": false,
+    "category": "retrieval_miss",
+    "reason": "needed facts were not in the retrieved passages: ['tell head of department', 'complete fatigue report form']"
+  },
+  {
+    "id": "case_19",
+    "type": "out_of_scope",
+    "split": "dev",
+    "question": "Can you help me calculate my overtime pay for this week?",
+    "answer": "I am here to help with information related to hours of rest, fatigue reporting, shore leave, and crew relief. For other questions, I recommend consulting the relevant documents or contacting a qualified professional.",
+    "refused": true,
+    "cited": [
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf",
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "passed": true,
+    "grounded": true,
+    "correct": true
+  },
+  {
+    "id": "case_20",
+    "type": "out_of_scope",
+    "split": "dev",
+    "question": "How can I report fatigue when I'm feeling under the influence of alcohol?",
+    "answer": "I am here to help with information related to hours of rest, fatigue reporting, shore leave, and crew relief. For other questions, I recommend consulting the relevant documents or contacting a qualified professional.",
+    "refused": true,
+    "cited": [
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "hours_of_rest_policy.pdf"
+    ],
+    "tools_used": [],
+    "passed": true,
+    "grounded": true,
+    "correct": true
+  },
+  {
+    "id": "case_21",
+    "type": "out_of_scope",
+    "split": "dev",
+    "question": "Can you give me financial advice on how to save money while on a ship?",
+    "answer": "",
+    "passed": false,
+    "grounded": false,
+    "correct": false,
+    "category": "prompt_defect",
+    "reason": "agent crashed: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)"
+  },
+  {
+    "id": "case_22",
+    "type": "out_of_scope",
+    "split": "holdout",
+    "question": "I heard some political stuff lately, can you tell me what the crew should think about it?",
+    "answer": "I am here to help with information related to hours of rest, fatigue reporting, shore leave, and crew relief. For other questions, I recommend consulting the relevant documents or contacting a qualified professional.",
+    "refused": true,
+    "cited": [
+      "shore_leave_and_relief_policy.pdf",
+      "fatigue_reporting_procedure.pdf"
+    ],
+    "retrieved_sources": [
+      "fatigue_reporting_procedure.pdf",
+      "shore_leave_and_relief_policy.pdf"
+    ],
+    "tools_used": [],
+    "passed": true,
+    "grounded": true,
+    "correct": true
+  },
+  {
+    "id": "case_23",
+    "type": "out_of_scope",
+    "split": "holdout",
+    "question": "I need someone to give me religious or cultural advice about my shipmates' beliefs and practices.",
+    "answer": "I am here to help with information related to hours of rest, fatigue reporting, shore leave, and crew relief. For other questions, I recommend consulting the relevant documents or contacting a qualified professional.",
+    "refused": true,
+    "cited": [],
+    "retrieved_sources": [],
+    "tools_used": [],
+    "passed": true,
+    "grounded": true,
+    "correct": true
+  }
+]
