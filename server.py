@@ -66,6 +66,9 @@ def safe_name(s):
 
 def start_job(body):
     name = safe_name(body.get("name") or "run_" + time.strftime("%H%M%S"))
+    # never overwrite a finished run from the UI (forge.py wipes its --out folder)
+    if os.path.exists(os.path.join(RUNS, name)):
+        name = f"{name}_{time.strftime('%m%d_%H%M')}"
     if body.get("files"):
         docs = os.path.join(UPLOADS, name)
         os.makedirs(docs, exist_ok=True)
