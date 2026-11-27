@@ -21,7 +21,7 @@ class LLM:
         if self.backend == "ollama":
             self.base_url = base_url or os.getenv("OLLAMA_URL", "http://localhost:11434")
         else:
-            self.base_url = base_url or os.getenv("OPENAI_BASE_URL", "http://localhost:1234/v1")
+            self.base_url = (base_url or os.getenv("OPENAI_BASE_URL", "http://localhost:1234/v1")).rstrip("/")
         self.api_key = os.getenv("OPENAI_API_KEY", "none")
         self.budget = max_tokens_budget
         self.calls = 0
@@ -65,6 +65,10 @@ class LLM:
         for attempt in range(5):
             r = requests.post(f"{self.base_url}/chat/completions", json=body, timeout=300,
                               headers={"Authorization": f"Bearer {self.api_key}"})
+            if r.status_code == 400 and "response_format" in body:
+                # some providers reject JSON mode; parse_json copes with plain text
+                body.pop("response_format")
+                continue
             if r.status_code not in (429, 500, 502, 503):
                 break
             # free hosted tiers rate-limit per minute; wait and retry

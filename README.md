@@ -51,9 +51,9 @@ A web UI on top of the same pipeline, with no extra dependencies (standard-libra
 
 ## Hosted version (Render)
 
-`render.yaml` deploys the dashboard as a free Render web service. Ollama can't run on a free instance, so the hosted version calls a small open model (Llama 3.1 8B) through Groq's free OpenAI-compatible API instead.
+`render.yaml` deploys the dashboard as a free Render web service. Ollama can't run on a free instance, so the hosted version calls a hosted model through an OpenAI-compatible API instead: Gemini by default (`gemini-3.8-flash`), or Groq's Llama 3.1 8B by changing two settings (see the comments in `render.yaml`). The committed demo runs in `runs/` were made locally with qwen2.5:3b through Ollama.
 
-1. Create a free API key at console.groq.com.
+1. Create a free API key at aistudio.google.com/apikey.
 2. In Render: **New → Blueprint**, pick this repo, and paste the key into `OPENAI_API_KEY` when asked.
 3. Open the service URL. The committed runs in `runs/` show up straight away, and "Try the agent" and "New run" work through the API.
 

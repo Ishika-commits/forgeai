@@ -1,6 +1,8 @@
 # Render Blueprint: deploys the ForgeAI dashboard as a free web service.
-# Ollama can't run on the free instance, so the hosted version uses Groq's
-# OpenAI-compatible API with a small open model. Set OPENAI_API_KEY in Render.
+# Ollama can't run on the free instance, so the hosted version calls a hosted
+# model through an OpenAI-compatible API (Gemini by default). Set OPENAI_API_KEY
+# in Render. To use Groq instead: OPENAI_BASE_URL=https://api.groq.com/openai/v1,
+# FORGE_MODEL=llama-3.1-8b-instant.
 services:
   - type: web
     name: forgeai
@@ -15,8 +17,8 @@ services:
       - key: FORGE_BACKEND
         value: openai
       - key: OPENAI_BASE_URL
-        value: https://api.groq.com/openai/v1
+        value: https://generativelanguage.googleapis.com/v1beta/openai
       - key: FORGE_MODEL
-        value: llama-3.1-8b-instant
+        value: gemini-3.8-flash
       - key: OPENAI_API_KEY
         sync: false

@@ -130,7 +130,7 @@ def health():
     if os.getenv("FORGE_BACKEND") == "fake":
         return {"ok": True, "backend": "fake (test model; scores mean nothing)", "models": ["fake"]}
     if os.getenv("FORGE_BACKEND") == "openai":
-        model = os.getenv("FORGE_MODEL", "llama-3.1-8b-instant")
+        model = os.getenv("FORGE_MODEL", "gemini-3.8-flash")
         if not os.getenv("OPENAI_API_KEY"):
             return {"ok": False, "backend": "hosted API", "models": [model], "error": "OPENAI_API_KEY is not set"}
         return {"ok": True, "backend": "hosted API", "models": [model], "default": model}
